@@ -1,0 +1,47 @@
+<template>
+	<view class="nav" :style="'height' + navBarHeight +'px'">
+		<view class="nav_title">
+			<text class="nav_title_text">微信</text>
+		</view>
+		<view class="nav_icon_box">
+			<text class="iconfont nav_icon_box_icon">&#xe698;</text>
+			<text class="iconfont nav_icon_box_icon">&#xe633;</text>
+		</view>
+	</view>
+</template>
+
+<script>
+	export default {
+		data() {
+			return {
+				tipBarHeight: 0,
+				navBarHeight: 0
+			}
+		},
+		mounted() {
+			// #ifdef APP-PLUS-NVUE
+				this.tipBarHeight = plus.navigator.getStatusbarHeight()
+			// #endif
+			this.navBarHeight = this.statusBarHeight + uni.upx2px(90)
+		}
+	}
+</script>
+
+<style lang="scss">
+@import "@/constant/css/constant.scss";
+.nav {
+	width: $boxWidth;
+	background-color: $boxBgColor;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0 30rpx;
+}
+.nav_icon_box {
+	flex-direction: row;
+	align-items: center;
+}
+.nav_icon_box_icon {
+	font-size: 60rpx;
+}
+</style>

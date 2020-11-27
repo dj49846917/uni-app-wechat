@@ -1,16 +1,76 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
-			"path": "pages/index/index",
+			"path": "pages/home/home",
 			"style": {
 				"navigationBarTitleText": "uni-app"
 			}
 		}
-	],
+	    ,{
+            "path" : "pages/chat/chat",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/look/look",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/account/account",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
 		"navigationBarBackgroundColor": "#F8F8F8",
-		"backgroundColor": "#F8F8F8"
+		"backgroundColor": "#F8F8F8",
+		"app-plus": {
+			"titleNView": false,
+			"scrollIndicator": "none"
+		}
+	},
+	"tabBar": {
+	    "color": "#000000",
+	    "selectedColor": "#07c261",
+	    "backgroundColor": "#ffffff",
+	    "list": [{
+	        "pagePath": "pages/home/home",
+	        "iconPath": "static/images/index.png",
+	        "selectedIconPath": "static/images/index-select.png",
+	        "text": "微信"
+	    }, 
+		{
+	        "pagePath": "pages/chat/chat",
+	        "iconPath": "static/images/mail.png",
+	        "selectedIconPath": "static/images/mail-select.png",
+	        "text": "通讯录"
+	    },
+		{
+		    "pagePath": "pages/look/look",
+		    "iconPath": "static/images/find.png",
+		    "selectedIconPath": "static/images/find-select.png",
+		    "text": "发现"
+		},
+		{
+		    "pagePath": "pages/account/account",
+		    "iconPath": "static/images/my.png",
+		    "selectedIconPath": "static/images/my-select.png",
+		    "text": "我"
+		}]
 	}
 }

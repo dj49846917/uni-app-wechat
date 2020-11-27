@@ -21,9 +21,9 @@
 
 <style>
 	/*每个页面公共css */
-	@import "./common/css/uni-nvue.css";
-	@import "./common/css/common.css";
+	@import "./static/css/uni-nvue.css";
+	@import "./static/css/common.css";
 	/* #ifndef APP-PLUS-NVUE */
-	@import "./common/css/icon.css";
+	@import "./static/css/icon.css";
 	/* #endif */
 </style>

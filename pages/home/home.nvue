@@ -1,0 +1,36 @@
+<template>
+	<view>
+		<!-- 导航栏 -->
+		<my-nav></my-nav>
+	</view>
+</template>
+
+<script>
+import myNav from '@/component/myNav/myNav.nvue';
+	export default {
+		components: {
+			myNav,
+		},
+		data() {
+			return {
+				tipBarHeight: 0
+			}
+		},
+		onLoad() {
+		},
+		mounted() {
+			
+		},
+		methods: {
+
+		}
+	}
+</script>
+
+<style lang="scss">
+	@import "@/constant/css/constant.scss";
+	.tipBar {
+		width: $boxWidth;
+		background-color: $boxBgColor;
+	}
+</style>
