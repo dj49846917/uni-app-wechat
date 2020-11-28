@@ -1,4 +1,4 @@
-const home = {
+const Home = {
 	state: {
 		user: "张三"
 	},
@@ -10,4 +10,4 @@ const home = {
 	}
 }
 
-export default home;
+export default Home;

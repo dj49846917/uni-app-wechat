@@ -8,6 +8,8 @@
 				fontFamily: 'iconfont',
 				src: "url('https://at.alicdn.com/t/font_2199095_voz8fueyab.ttf')"
 			});
+			// 获取状态栏的高度
+			this.$store.commit("app/setTipBarHeight", plus.navigator.getStatusbarHeight())
 			// #endif
 		},
 		onShow: function() {

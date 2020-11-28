@@ -1,11 +1,12 @@
 <template>
-	<view class="nav" :style="'height' + navBarHeight +'px'">
+	<view class="nav">
 		<view class="nav_title">
 			<text class="nav_title_text">微信</text>
+			<text v-if="isActive">{{ messageCount }}</text>
 		</view>
 		<view class="nav_icon_box">
-			<text class="iconfont nav_icon_box_icon">&#xe698;</text>
-			<text class="iconfont nav_icon_box_icon">&#xe633;</text>
+			<text class="iconfont nav_icon_box_search">&#xe698;</text>
+			<text class="iconfont nav_icon_box_add">&#xe633;</text>
 		</view>
 	</view>
 </template>
@@ -14,16 +15,11 @@
 	export default {
 		data() {
 			return {
-				tipBarHeight: 0,
-				navBarHeight: 0
+				messageCount: '(10)',
+				isActive: true
 			}
 		},
-		mounted() {
-			// #ifdef APP-PLUS-NVUE
-				this.tipBarHeight = plus.navigator.getStatusbarHeight()
-			// #endif
-			this.navBarHeight = this.statusBarHeight + uni.upx2px(90)
-		}
+		
 	}
 </script>
 
@@ -36,12 +32,20 @@
 	justify-content: space-between;
 	align-items: center;
 	padding: 0 30rpx;
+	height: 90rpx;
+}
+.nav_title {
+	flex-direction: row;
 }
 .nav_icon_box {
 	flex-direction: row;
 	align-items: center;
 }
-.nav_icon_box_icon {
+.nav_icon_box_search {
 	font-size: 60rpx;
+	margin-right: 5rpx;
+}
+.nav_icon_box_add {
+	font-size: 56rpx;
 }
 </style>

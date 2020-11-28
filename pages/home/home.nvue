@@ -1,25 +1,29 @@
 <template>
 	<view>
+		<!-- 状态栏 -->
+		<view class="tipBar" :style="getStatusBarHeight"></view>
 		<!-- 导航栏 -->
 		<my-nav></my-nav>
+		<!-- 列表 -->
 	</view>
 </template>
 
 <script>
-import myNav from '@/component/myNav/myNav.nvue';
+	import myNav from '@/component/myNav/myNav.nvue';
+	import { mapState } from 'vuex'
 	export default {
 		components: {
 			myNav,
 		},
 		data() {
-			return {
-				tipBarHeight: 0
-			}
+			return {}
 		},
-		onLoad() {
-		},
-		mounted() {
-			
+		computed: {
+			...mapState({
+				getStatusBarHeight: (state) => {
+					return `height: ${state.app.tipBarHeight}px`
+				}
+			}),
 		},
 		methods: {
 
