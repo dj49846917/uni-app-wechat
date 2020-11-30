@@ -8,9 +8,11 @@
 				fontFamily: 'iconfont',
 				src: "url('https://at.alicdn.com/t/font_2199095_voz8fueyab.ttf')"
 			});
-			// 获取状态栏的高度
 			this.$store.commit("app/setTipBarHeight", plus.navigator.getStatusbarHeight())
 			// #endif
+			const deviceInfo = uni.getSystemInfoSync()
+			// 获取状态栏的高度
+			this.$store.commit("app/setWindowHeight", deviceInfo.windowHeight)
 		},
 		onShow: function() {
 			console.log('App Show')

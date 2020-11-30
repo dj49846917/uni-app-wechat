@@ -1,0 +1,124 @@
+<template>
+	<scroll-view scroll-y="true" :style="getScrollHeight">
+		<view class="list">
+			<view class="list_left_box">
+				<image src="@/static/images/userpic.jpg" class="list_icon"></image>
+				<view class="list_left_tip">
+					<text class="list_left_tip_num">2</text>
+				</view>
+			</view>
+			<view class="list_content">
+				<view class="list_content_top">
+					<text class="list_content_top_text list_space">张三</text>
+					<text class="list_content_top_text">上午10:29</text>
+				</view>
+				<view class="list_content_bottom">
+					<text class="list_content_bottom_text">你好1111</text>
+				</view>
+			</view>
+		</view>
+	</scroll-view>
+</template>
+
+<script>
+	import { mapState } from 'vuex'
+	export default {
+		data() {
+			return {
+				
+			}
+		},
+		computed: {
+			...mapState({
+				// 获取可滚动区域的高度
+				getScrollHeight: (state)=>{
+					const navBarHeight = uni.upx2px(90)
+					const tabBarHeight = uni.upx2px(110)
+					// #ifndef MP
+					const scrollHeight = state.app.height - state.app.tipBarHeight - navBarHeight - tabBarHeight;
+					return `height: ${scrollHeight}px`;
+					// #endif
+					
+					// #ifdef MP
+					const scrollHeight2 = state.app.height - state.app.tipBarHeight - navBarHeight;
+					return `height: ${scrollHeight2}px`;
+					// #endif
+				}
+			}),
+		},
+	}
+</script>
+
+<style lang="scss">
+	@import "@/constant/css/constant.scss";
+	.list {
+		width: 750rpx;
+		height: 135rpx;
+		flex-direction: row;
+		align-items: center;
+	}
+	.list_left_box {
+		width: 152rpx;
+		height: 135rpx;
+		padding: 0 30rpx;
+		padding-top: 21.5rpx;
+	}
+	.list_left_tip {
+		padding: 0 10rpx;
+		border-radius: 18rpx;
+		background-color: red;
+		position: absolute;
+		right: 16rpx;
+		top: 10rpx;
+		@include center;
+	}
+	.list_icon {
+		width: 92rpx;
+		height: 92rpx;
+		border-radius: 10rpx;
+	}
+	.list_left_tip_num {
+		font-size: 26rpx;
+		color: #fff;
+	}
+	.list_content {
+		flex: 1;
+		height: 135rpx;
+		border-bottom-color: $lineBorderColor;
+		border-bottom-width: 1rpx;
+		padding-right: 30rpx;
+		padding-top: 22rpx;
+		padding-bottom: 22rpx;
+		justify-content: space-between;	
+	}
+	.list_content_top {
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+	}
+	.list_content_top_text {
+		@include listTitle;
+	}
+	.list_space {
+		width: 360rpx;
+		/* #ifdef APP-PLUS-NVUE */
+		lines: 1;
+		text-overflow: ellipsis;
+		/* #endif */
+		
+		/* #ifndef APP-PLUS-NVUE */
+		display: -webkit-box; /** 对象作为伸缩盒子模型显示 **/
+		overflow: hidden;
+		word-break: break-all;  /* break-all(允许在单词内换行。) */
+		text-overflow: ellipsis;  /* 超出部分省略号 */
+		-webkit-box-orient: vertical; /** 设置或检索伸缩盒对象的子元素的排列方式 **/
+		-webkit-line-clamp: 1; /** 显示的行数 **/
+		/* #endif */
+	}
+	
+	.list_content_bottom_text {
+		@include listText
+	}
+	
+</style>
+

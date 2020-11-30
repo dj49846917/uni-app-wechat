@@ -4,3 +4,29 @@ $lineBorderColor: #dfdfdf;
 $boxWidth: 750rpx;
 // 盒子的背景颜色
 $boxBgColor: #ededed;
+// 列表标题文字大小
+$listTitleSize: 36rpx;
+// 列表标题文字颜色
+$listTitleColor: #333;
+// 列表文字大小
+$listTextSize: 30rpx;
+// 列表文字颜色
+$listTextColor: #999;
+
+// 水平垂直居中
+@mixin center {
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+}
+
+// 列表标题
+@mixin listTitle {
+	font-size: $listTitleSize;
+	color: $listTitleColor;
+}
+// 列表文字
+@mixin listText {
+	font-size: $listTextSize;
+	color: $listTextColor;
+}

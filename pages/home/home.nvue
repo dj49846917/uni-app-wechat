@@ -3,30 +3,34 @@
 		<!-- 状态栏 -->
 		<view class="tipBar" :style="getStatusBarHeight"></view>
 		<!-- 导航栏 -->
-		<my-nav></my-nav>
+		<my-nav :showMessageCount="true"></my-nav>
 		<!-- 列表 -->
+		<home-list></home-list>
 	</view>
 </template>
 
 <script>
 	import myNav from '@/component/myNav/myNav.nvue';
+	import homeList from '@/pages/home/homeList.nvue';
 	import { mapState } from 'vuex'
 	export default {
 		components: {
 			myNav,
+			homeList
 		},
 		data() {
 			return {}
 		},
 		computed: {
 			...mapState({
+				// 获取状态栏的高度
 				getStatusBarHeight: (state) => {
 					return `height: ${state.app.tipBarHeight}px`
-				}
+				},
 			}),
 		},
 		methods: {
-
+			
 		}
 	}
 </script>
