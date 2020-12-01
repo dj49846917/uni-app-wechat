@@ -1,22 +1,32 @@
 <template>
-	<view class="nav">
-		<view class="nav_title" v-if="showLeftTitle">
-			<text class="nav_title_text">{{ title }}</text>
-			<text v-if="showMessageCount">{{ messageCount }}</text>
-		</view>
-		<view class="nav_icon_box">
-			<view class="nav_icon_item" @click="rightFirstFunc">
-				<text class="iconfont nav_icon_box_search">{{ rightFirstSource }}</text>
+	<div>
+		<view class="nav">
+			<view class="nav_title" v-if="showLeftTitle">
+				<text class="nav_title_text">{{ title }}</text>
+				<text v-if="showMessageCount">{{ messageCount }}</text>
 			</view>
-			<view class="nav_icon_item" @click="rightSecondFunc">
-				<text class="iconfont nav_icon_box_add">{{ rightRightSource }}</text>
+			<view class="nav_icon_box">
+				<view class="nav_icon_item" @click="rightFirstFunc">
+					<text class="iconfont nav_icon_box_search">{{ rightFirstSource }}</text>
+				</view>
+				<view class="nav_icon_item" @click="rightSecondFunc">
+					<text class="iconfont nav_icon_box_add">{{ rightRightSource }}</text>
+				</view>
 			</view>
 		</view>
-	</view>
+		<!-- 弹出层 -->
+		<my-model ref="popUp" :bodyWidth="320" :bodyHeight="525" bodyBgColor="#343a40" isMaskOpacity>
+			<view class="menu"></view>
+		</my-model>
+	</div>
 </template>
 
 <script>
+	import myModel from '@/component/myNav/myModel.nvue';
 	export default {
+		components: {
+			myModel
+		},
 		props: {
 			// 是否导航栏的左侧标题
 			showLeftTitle: {
@@ -70,8 +80,14 @@
 			},
 			// 点击右侧第二个按钮
 			rightSecondFunc() {
-				console.log('2')
-			}
+				// #ifdef APP-PLUS-NVUE
+					const height = uni.upx2px(113)+ this.$store.state.app.tipBarHeight
+					this.$refs.popUp.show(uni.upx2px(415), height)
+				// #endif
+				// #ifndef APP-PLUS-NVUE
+					this.$refs.popUp.show(uni.upx2px(415), uni.upx2px(113))
+				// #endif
+			},
 		}
 	}
 </script>
@@ -111,5 +127,9 @@
 
 	.nav_icon_box_add {
 		font-size: 56rpx;
+	},
+	.menu {
+		width: 320rpx;
+		height: 525rpx;
 	}
 </style>

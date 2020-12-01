@@ -1,0 +1,102 @@
+<template>
+	<view class="model" v-if="isVisible">
+		<!-- 蒙版 -->
+		<view :class="isMaskOpacity ? 'model_cover_dark' : 'model_cover'" v-if="isShowMask" @click="hide"></view>
+		<!-- 主要内容 -->
+		<view ref="model" :class="isBottom ? 'model_bottom' : 'model_content'" :style="getModelContentStyle">
+			<slot></slot>
+		</view>
+	</view>
+</template>
+
+<script>
+	export default {
+		props: {
+			// 是否展示蒙版
+			isShowMask: { type: Boolean, default: true },
+			isMaskOpacity: { type: Boolean, default: false },
+			// 是否内容展示在底部
+			isBottom: { type: Boolean, default: false },
+			// 内容的背景颜色
+			bodyBgColor: { type: String, default: '#fff' },
+			// 弹出层内容宽度
+			bodyWidth:{ type:Number, default:0 },
+			// 弹出层内容高度
+			bodyHeight:{ type:Number, default:0 },
+		},
+		
+		computed: {
+			getModelContentStyle() {
+				const left = this.x > -1 ? `${this.x}px` : ''
+				const top = this.y > -1 ? `${this.y}px` : ''
+				return `
+					background-color: ${this.bodyBgColor};
+					left: ${left};
+					top: ${top};
+				`
+			}
+		},
+		data() {
+			return {
+				isVisible: false,
+				maxX: 0,
+				maxY: 0,
+				x: -1,
+				y: 1
+			}
+		},
+		
+		mounted() {
+			const deviceInfo = uni.getSystemInfoSync()
+			this.maxX = deviceInfo.windowWidth - uni.upx2px(this.bodyWidth) 
+			this.maxY = deviceInfo.windowHeight - uni.upx2px(this.bodyHeight) 
+		},
+		methods: {
+			show(x=-1, y=-1) {
+				console.log("this.maxX", this.maxX, this.maxY)
+				this.isVisible = true
+				this.x = x > this.maxX ? this.maxX : x
+				this.y = y > this.maxY ? this.maxY : y
+			},
+			hide() {
+				// this.$emit('hideModel')
+				this.isVisible = false
+			}
+		}
+	}
+</script>
+
+<style lang="scss">
+@import "@/constant/css/constant.scss";
+.model {
+	z-index: 9999;
+}
+.model_cover {
+	width: 750rpx;
+	position: fixed;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	background-color: rgba(0, 0, 0, 0.5);
+}
+.model_cover_dark {
+	width: 750rpx;
+	position: fixed;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	background-color: rgba(0, 0, 0, 0);
+}
+.model_content {
+	position: fixed;
+	background-color: #fff;
+}
+.model_bottom {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	background-color: #fff;
+	right: 0;
+	height: 300rpx;
+}
+</style>

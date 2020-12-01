@@ -5,21 +5,33 @@
 		<!-- 导航栏 -->
 		<my-nav :showMessageCount="true"></my-nav>
 		<!-- 列表 -->
-		<home-list></home-list>
+		<home-list :list="list" @long="longPressShowMenu"></home-list>
+		<!-- 弹出层 -->
+		<my-model ref="popUp2" :bodyWidth="240" :bodyHeight="300">
+			<view class="menu"></view>
+		</my-model>
 	</view>
 </template>
 
 <script>
-	import myNav from '@/component/myNav/myNav.nvue';
-	import homeList from '@/pages/home/homeList.nvue';
 	import { mapState } from 'vuex'
+	import myNav from '@/component/myNav/myNav.nvue';
+	import myModel from '@/component/myNav/myModel.nvue';
+	import homeList from '@/pages/home/homeList.nvue';
+	import { listData } from '@/static/data/home.js';
 	export default {
 		components: {
 			myNav,
-			homeList
+			homeList,
+			myModel
 		},
 		data() {
-			return {}
+			return {
+				list: [],  // 列表数据
+			}
+		},
+		created() {
+			this.list = listData
 		},
 		computed: {
 			...mapState({
@@ -30,7 +42,10 @@
 			}),
 		},
 		methods: {
-			
+			longPressShowMenu(obj) {
+				console.log('obj', obj)
+				this.$refs.popUp2.show(obj.x, obj.y)
+			}
 		}
 	}
 </script>
@@ -40,5 +55,9 @@
 	.tipBar {
 		width: $boxWidth;
 		background-color: $boxBgColor;
+	}
+	.menu {
+		width: 240rpx;
+		height: 300rpx;
 	}
 </style>

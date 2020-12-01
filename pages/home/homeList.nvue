@@ -1,19 +1,19 @@
 <template>
 	<scroll-view scroll-y="true" :style="getScrollHeight">
-		<view class="list">
+		<view class="list" v-for="item in list" :key="item.id" hover-class="list_light" @longpress="showListMenu">
 			<view class="list_left_box">
-				<image src="@/static/images/userpic.jpg" class="list_icon"></image>
+				<image :src="item.avatar" class="list_icon" mode="widthFix"></image>
 				<view class="list_left_tip">
-					<text class="list_left_tip_num">2</text>
+					<text class="list_left_tip_num">{{ item.noreadnum }}</text>
 				</view>
 			</view>
 			<view class="list_content">
 				<view class="list_content_top">
-					<text class="list_content_top_text list_space">张三</text>
-					<text class="list_content_top_text">上午10:29</text>
+					<text class="list_space">{{ item.name }}</text>
+					<text class="list_content_top_time">{{ item.update_time | formatTime }}</text>
 				</view>
 				<view class="list_content_bottom">
-					<text class="list_content_bottom_text">你好1111</text>
+					<text class="list_content_bottom_text">{{ item.data }}</text>
 				</view>
 			</view>
 		</view>
@@ -22,10 +22,23 @@
 
 <script>
 	import { mapState } from 'vuex'
+	import utils from "@/static/js/time.js"
+	
 	export default {
+		props: {
+			list: {
+				type: Array,
+				default: []
+			}
+		},
 		data() {
 			return {
 				
+			}
+		},
+		filters: {
+			formatTime(v) {
+				return utils.gettime(v)
 			}
 		},
 		computed: {
@@ -46,6 +59,30 @@
 				}
 			}),
 		},
+		methods: {
+			showListMenu(e) {
+				let x = 0
+				let y = 0
+				// #ifdef APP-PLUS-NVUE
+				if (Array.isArray(e.changedTouches) && e.changedTouches.length > 0) {
+					x = e.changedTouches[0].screenX
+					y = e.changedTouches[0].screenY
+				}
+				// #endif
+				// #ifdef H5
+				x = e.changedTouches[0].pageX
+				y = e.changedTouches[0].pageY
+				// #endif
+				// #ifdef MP
+				x = e.detail.x
+				y = e.detail.y
+				// #endif
+				this.$emit('long',{
+					x,
+					y,
+				})
+			}
+		}
 	}
 </script>
 
@@ -56,6 +93,9 @@
 		height: 135rpx;
 		flex-direction: row;
 		align-items: center;
+	}
+	.list_light {
+		background-color: $clickLightColor;
 	}
 	.list_left_box {
 		width: 152rpx;
@@ -96,28 +136,19 @@
 		justify-content: space-between;
 		align-items: center;
 	}
-	.list_content_top_text {
-		@include listTitle;
-	}
 	.list_space {
+		@include listTitle;
 		width: 360rpx;
-		/* #ifdef APP-PLUS-NVUE */
-		lines: 1;
-		text-overflow: ellipsis;
-		/* #endif */
-		
-		/* #ifndef APP-PLUS-NVUE */
-		display: -webkit-box; /** 对象作为伸缩盒子模型显示 **/
-		overflow: hidden;
-		word-break: break-all;  /* break-all(允许在单词内换行。) */
-		text-overflow: ellipsis;  /* 超出部分省略号 */
-		-webkit-box-orient: vertical; /** 设置或检索伸缩盒对象的子元素的排列方式 **/
-		-webkit-line-clamp: 1; /** 显示的行数 **/
-		/* #endif */
+		@include wordBreak;
+	}
+	.list_content_top_time {
+		font-size: 28rpx;
+		color: $listTextColor;
 	}
 	
 	.list_content_bottom_text {
-		@include listText
+		@include listText;
+		@include wordBreak;
 	}
 	
 </style>
