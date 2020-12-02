@@ -16,13 +16,23 @@
 		</view>
 		<!-- 弹出层 -->
 		<my-model ref="popUp" :bodyWidth="320" :bodyHeight="525" bodyBgColor="#343a40" isMaskOpacity>
-			<view class="menu"></view>
+			<view class="menu">
+				<view class="menu_item" v-for="item in menuList" :key="item.id" hover-class="menu_item_dark">
+					<view class="menu_icon">
+						<text class="iconfont menu_icon_item">{{ item.icon }}</text>
+					</view>
+					<view class="menu_text_box">
+						<text class="menu_text">{{ item.val }}</text>
+					</view>
+				</view>
+			</view>
 		</my-model>
 	</div>
 </template>
 
 <script>
-	import myModel from '@/component/myNav/myModel.nvue';
+	import myModel from '@/component/myModel/myModel.nvue';
+	import { homeMenuData } from '@/static/data/home.js';
 	export default {
 		components: {
 			myModel
@@ -71,7 +81,12 @@
 		},
 		data() {
 			return {
+				menuList: [],		// 菜单列表
 			}
+		},
+		created() {
+			// 获取数据
+			this.menuList = homeMenuData	
 		},
 		methods: {
 			// 点击右侧第一个按钮
@@ -94,13 +109,12 @@
 
 <style lang="scss">
 	@import "@/constant/css/constant.scss";
-
+	$menuItemHeight: 105rpx;
 	.nav {
 		width: $boxWidth;
 		background-color: $boxBgColor;
-		flex-direction: row;
+		@include verticalCenter;
 		justify-content: space-between;
-		align-items: center;
 		padding-left: 30rpx;
 		padding-right: 10rpx;
 		height: 90rpx;
@@ -111,18 +125,16 @@
 	}
 
 	.nav_icon_box {
-		flex-direction: row;
-		align-items: center;
+		@include verticalCenter;
 	}
 	.nav_icon_item {
 		height: 90rpx;
 		width: 90rpx;
-		align-items: center;
-		justify-content: center;
+		@include center;
 	}
 
 	.nav_icon_box_search {
-		font-size: 60rpx;
+		font-size: $iconSize;
 	}
 
 	.nav_icon_box_add {
@@ -131,5 +143,37 @@
 	.menu {
 		width: 320rpx;
 		height: 525rpx;
+		border-radius: 10rpx;
+	}
+	.menu_item {
+		flex: 1;
+		height: $menuItemHeight;
+		@include verticalCenter;
+	}
+	.menu_item_dark {
+		@extend .menu_item;
+		background-color: $clickDarkColor;
+	}
+	.menu_icon {
+		width: 106rpx;
+		height: $menuItemHeight;
+		@include center;
+		padding-left: 10rpx;
+	}
+	.menu_icon_item {
+		font-size: 45rpx;
+		color: #fff;
+	}
+	.menu_text_box {
+		flex: 1;
+		height: $menuItemHeight;
+		@include verticalCenter;
+		border-bottom-color: #575757;
+		border-bottom-width: 1rpx;
+		border-style: solid;
+	}
+	.menu_text {
+		flex: 1;
+		color: #fff;
 	}
 </style>

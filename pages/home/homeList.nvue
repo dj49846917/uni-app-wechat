@@ -1,29 +1,52 @@
 <template>
 	<scroll-view scroll-y="true" :style="getScrollHeight">
-		<view class="list" v-for="item in list" :key="item.id" hover-class="list_light" @longpress="showListMenu">
-			<view class="list_left_box">
-				<image :src="item.avatar" class="list_icon" mode="widthFix"></image>
-				<view class="list_left_tip">
-					<text class="list_left_tip_num">{{ item.noreadnum }}</text>
+		<block v-for="(item, index) in list" :key="item.id">
+			<view class="list" hover-class="list_light" v-if="item.isTop === 1" @longpress="(e)=>showListMenu(e, item, index)">
+				<view class="list_left_box">
+					<image :src="item.avatar" class="list_icon" mode="widthFix"></image>
+					<view class="list_left_tip" v-if="Number(item.noreadnum) > 0">
+						<text class="list_left_tip_num">{{ item.noreadnum }}</text>
+					</view>
+				</view>
+				<view class="list_content">
+					<view class="list_content_top">
+						<text class="list_space">{{ item.name }}</text>
+						<text class="list_content_top_time">{{ item.update_time | formatTime }}</text>
+					</view>
+					<view class="list_content_bottom">
+						<text class="list_content_bottom_text">{{ item.data }}</text>
+					</view>
 				</view>
 			</view>
-			<view class="list_content">
-				<view class="list_content_top">
-					<text class="list_space">{{ item.name }}</text>
-					<text class="list_content_top_time">{{ item.update_time | formatTime }}</text>
+		</block>
+		<block v-for="(item, index) in list" :key="item.id">
+			<view class="list" hover-class="list_light" v-if="item.isTop === 2" @longpress="(e)=>showListMenu(e, item, index)">
+				<view class="list_left_box">
+					<image :src="item.avatar" class="list_icon" mode="widthFix"></image>
+					<view class="list_left_tip" v-if="Number(item.noreadnum) > 0">
+						<text class="list_left_tip_num">{{ item.noreadnum }}</text>
+					</view>
 				</view>
-				<view class="list_content_bottom">
-					<text class="list_content_bottom_text">{{ item.data }}</text>
+				<view class="list_content">
+					<view class="list_content_top">
+						<text class="list_space">{{ item.name }}</text>
+						<text class="list_content_top_time">{{ item.update_time | formatTime }}</text>
+					</view>
+					<view class="list_content_bottom">
+						<text class="list_content_bottom_text">{{ item.data }}</text>
+					</view>
 				</view>
 			</view>
-		</view>
+		</block>
 	</scroll-view>
 </template>
 
 <script>
-	import { mapState } from 'vuex'
+	import {
+		mapState
+	} from 'vuex'
 	import utils from "@/static/js/time.js"
-	
+
 	export default {
 		props: {
 			list: {
@@ -33,7 +56,7 @@
 		},
 		data() {
 			return {
-				
+
 			}
 		},
 		filters: {
@@ -44,14 +67,14 @@
 		computed: {
 			...mapState({
 				// 获取可滚动区域的高度
-				getScrollHeight: (state)=>{
+				getScrollHeight: (state) => {
 					const navBarHeight = uni.upx2px(90)
 					const tabBarHeight = uni.upx2px(110)
 					// #ifndef MP
 					const scrollHeight = state.app.height - state.app.tipBarHeight - navBarHeight - tabBarHeight;
 					return `height: ${scrollHeight}px`;
 					// #endif
-					
+
 					// #ifdef MP
 					const scrollHeight2 = state.app.height - state.app.tipBarHeight - navBarHeight;
 					return `height: ${scrollHeight2}px`;
@@ -60,7 +83,7 @@
 			}),
 		},
 		methods: {
-			showListMenu(e) {
+			showListMenu(e, item, index) {
 				let x = 0
 				let y = 0
 				// #ifdef APP-PLUS-NVUE
@@ -77,9 +100,11 @@
 				x = e.detail.x
 				y = e.detail.y
 				// #endif
-				this.$emit('long',{
+				this.$emit('long', {
 					x,
 					y,
+					item,
+					index
 				})
 			}
 		}
@@ -88,21 +113,25 @@
 
 <style lang="scss">
 	@import "@/constant/css/constant.scss";
+	$listHeight : 135rpx;
+
 	.list {
 		width: 750rpx;
-		height: 135rpx;
-		flex-direction: row;
-		align-items: center;
+		height: $listHeight;
+		@include verticalCenter;
 	}
+
 	.list_light {
 		background-color: $clickLightColor;
 	}
+
 	.list_left_box {
 		width: 152rpx;
-		height: 135rpx;
+		height: $listHeight;
 		padding: 0 30rpx;
 		padding-top: 21.5rpx;
 	}
+
 	.list_left_tip {
 		padding: 0 10rpx;
 		border-radius: 18rpx;
@@ -112,15 +141,18 @@
 		top: 10rpx;
 		@include center;
 	}
+
 	.list_icon {
 		width: 92rpx;
 		height: 92rpx;
 		border-radius: 10rpx;
 	}
+
 	.list_left_tip_num {
 		font-size: 26rpx;
 		color: #fff;
 	}
+
 	.list_content {
 		flex: 1;
 		height: 135rpx;
@@ -129,27 +161,27 @@
 		padding-right: 30rpx;
 		padding-top: 22rpx;
 		padding-bottom: 22rpx;
-		justify-content: space-between;	
-	}
-	.list_content_top {
-		flex-direction: row;
 		justify-content: space-between;
-		align-items: center;
 	}
+
+	.list_content_top {
+		@include verticalCenter;
+		justify-content: space-between;
+	}
+
 	.list_space {
 		@include listTitle;
 		width: 360rpx;
 		@include wordBreak;
 	}
+
 	.list_content_top_time {
 		font-size: 28rpx;
 		color: $listTextColor;
 	}
-	
+
 	.list_content_bottom_text {
 		@include listText;
 		@include wordBreak;
 	}
-	
 </style>
-

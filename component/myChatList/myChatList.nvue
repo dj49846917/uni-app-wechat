@@ -1,0 +1,74 @@
+<template>
+	<view class="list_item" hover-class="list_light">
+		<view class="list_item_left">
+			<image :src="item.avatar ? item.avatar : defaultPic" mode="widthFix" class="list_item_box"></image>
+		</view>
+		<view class="list_item_right">
+			<text class="list_item_right_text">{{ item.val }}</text>
+		</view>
+	</view>
+</template>
+
+<script>
+	export default {
+		props: {
+			index: {
+				type: Number,
+				default: 0
+			},
+			item: {
+				type: Object,
+				default: {}
+			}
+		},
+		data() {
+			return {
+				defaultPic: '/static/images/userpic.png'
+			}
+		}
+	}
+</script>
+
+<style lang="scss">
+	@import "@/constant/css/constant.scss";
+	$listItemHeight: 105rpx;
+
+	.tipBar {
+		width: $boxWidth;
+		background-color: $boxBgColor;
+	}
+
+	.list_item {
+		width: $boxWidth;
+		height: $listItemHeight;
+		@include verticalCenter;
+	}
+
+	.list_item_left {
+		width: 136rpx;
+		height: $listItemHeight;
+		@include center;
+	}
+
+	.list_item_box {
+		width: 76rpx;
+		height: 76rpx;
+	}
+
+	.list_item_icon {
+		color: #fff;
+		font-size: 45rpx;
+	}
+
+	.list_item_right {
+		flex: 1;
+		height: $listItemHeight;
+		@include borderBottom;
+		@include verticalCenter;
+		color: $listTitleColor;
+	}
+
+	.list_light {
+		background-color: $clickLightColor;
+	}
+</style>

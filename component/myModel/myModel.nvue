@@ -14,6 +14,7 @@
 		props: {
 			// 是否展示蒙版
 			isShowMask: { type: Boolean, default: true },
+			// 是否将蒙版设置成透明
 			isMaskOpacity: { type: Boolean, default: false },
 			// 是否内容展示在底部
 			isBottom: { type: Boolean, default: false },
@@ -59,7 +60,6 @@
 				this.y = y > this.maxY ? this.maxY : y
 			},
 			hide() {
-				// this.$emit('hideModel')
 				this.isVisible = false
 			}
 		}
@@ -73,30 +73,22 @@
 }
 .model_cover {
 	width: 750rpx;
-	position: fixed;
-	top: 0;
-	left: 0;
-	bottom: 0;
+	@include fixed;
 	background-color: rgba(0, 0, 0, 0.5);
 }
 .model_cover_dark {
 	width: 750rpx;
-	position: fixed;
-	top: 0;
-	left: 0;
-	bottom: 0;
+	@include fixed;
 	background-color: rgba(0, 0, 0, 0);
 }
 .model_content {
 	position: fixed;
 	background-color: #fff;
+	border-radius: 10rpx;
 }
 .model_bottom {
-	position: fixed;
-	bottom: 0;
-	left: 0;
+	@include fixed;
 	background-color: #fff;
-	right: 0;
 	height: 300rpx;
 }
 </style>

@@ -1,19 +1,106 @@
 <template>
 	<view>
-		2222
+		<!-- 状态栏 -->
+		<view class="tipBar" :style="getStatusBarHeight"></view>
+		<!-- 导航栏 -->
+		<my-nav :showMessageCount="false" title="通讯录"></my-nav>
+		<!-- 功能区部分 -->
+		<scroll-view scroll-y="true" :style="getScrollHeight">
+			<my-chat-list v-for="(item, index) in funcList" :key="item.id" :index="index" :item="item" />
+			<view class="chat_list" v-for="item in chatList" :key="item.id">
+				<view class="chat_list_title">
+					<text class="chat_list_title_text">{{ item.title }}</text>
+				</view>
+				<my-chat-list v-for="(it, index) in item.list" :key="it.id" :index="index" :item="it" />
+			</view>
+		</scroll-view>
+		<view class="alphabet">
+			<view class="alphabet_item" v-for="(piece, index) in alphabetList" :key="index">
+				<text class="alphabet_item_text">{{ piece }}</text>
+			</view>
+		</view>
 	</view>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import myNav from '@/component/myNav/myNav.nvue';
+import myChatList from '@/component/myChatList/myChatList.nvue';
+import { chatFuncMenu, chatListData, chatCategory } from '@/static/data/chat.js';
 	export default {
+		components: {
+			myNav,
+			myChatList
+		},
 		data() {
 			return {
-				
+				funcList: [],		// 功能区列表
+				chatList: [],		// 通讯录列表
+				alphabetList: [],	// 字母列表
 			};
+		},
+		computed: {
+			...mapState({
+				// 获取状态栏的高度
+				getStatusBarHeight: (state) => {
+					return `height: ${state.app.tipBarHeight}px`
+				},
+				// 获取可滚动区域的高度
+				getScrollHeight: (state) => {
+					const navBarHeight = uni.upx2px(90)
+					const tabBarHeight = uni.upx2px(110)
+					// #ifndef MP
+					const scrollHeight = state.app.height - state.app.tipBarHeight - navBarHeight - tabBarHeight;
+					return `height: ${scrollHeight}px`;
+					// #endif
+				
+					// #ifdef MP
+					const scrollHeight2 = state.app.height - state.app.tipBarHeight - navBarHeight;
+					return `height: ${scrollHeight2}px`;
+					// #endif
+				}
+			}),
+		},
+		created() {
+			this.funcList = chatFuncMenu
+			this.chatList = chatListData
+			this.alphabetList = chatCategory
 		}
 	}
 </script>
 
 <style lang="scss">
-
+@import "@/constant/css/constant.scss";
+	.tipBar {
+		width: $boxWidth;
+		background-color: $boxBgColor;
+	}
+	.chat_list_title {
+		width: $boxWidth;
+		height: 60rpx;
+		padding-left: 30rpx;
+		background-color: $boxBgColor;
+		@include borderBottom;
+		@include verticalCenter;
+	}
+	.chat_list_title_text {
+		font-size: 26rpx;
+		color: $listTextColor;
+	}
+	.alphabet {
+		position: fixed;
+		right: 0;
+		top: 10%;
+		width: 45rpx;
+		z-index: 9999;
+	}
+	.alphabet_item {
+		width: 45rpx;
+		@include horizontalCenter;
+		padding: 1rpx 0;
+	}
+	.alphabet_item_text {
+		font-size: 20rpx;
+		color: $listTitleColor;
+	}
 </style>

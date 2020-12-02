@@ -3,7 +3,7 @@ $lineBorderColor: #dfdfdf;
 // 盒子的宽度
 $boxWidth: 750rpx;
 // 盒子的背景颜色
-$boxBgColor: #ededed;
+$boxBgColor: #efefef;
 // 列表标题文字大小
 $listTitleSize: 36rpx;
 // 列表标题文字颜色
@@ -14,12 +14,43 @@ $listTextSize: 30rpx;
 $listTextColor: #999;
 // 点击的hover样式
 $clickLightColor: #f8f9fa;
+$clickDarkColor: #333;
+// icon图标的统一文字大小
+$iconSize: 60rpx;
+
+// 铺满屏幕的定位模式
+@mixin fixed {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+}
+
+// 底部边框样式
+@mixin borderBottom {
+	border-bottom-color: $lineBorderColor;
+	border-bottom-width: 1rpx;
+	border-style: solid;
+}
 
 // 水平垂直居中
 @mixin center {
 	flex-direction: row;
 	justify-content: center;
 	align-items: center;
+}
+
+// 垂直居中
+@mixin verticalCenter {
+	flex-direction: row;
+	align-items: center;
+}
+
+// 水平居中
+@mixin horizontalCenter {
+	flex-direction: row;
+	justify-content: center;
 }
 
 // 列表标题
@@ -48,4 +79,10 @@ $clickLightColor: #f8f9fa;
 	-webkit-box-orient: vertical; /** 设置或检索伸缩盒对象的子元素的排列方式 **/
 	-webkit-line-clamp: 1; /** 显示的行数 **/
 	/* #endif */
+}
+
+// 图标的统一样式
+@mixin iconStyle {
+	width: 60rpx;
+	height: 60rpx;
 }
