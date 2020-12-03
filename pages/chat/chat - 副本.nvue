@@ -20,7 +20,8 @@
 			</view>
 		</scroll-view>
 		<view 
-			class="alphabet"
+			class="alphabet" 
+			:style="getAlphabetPos" 
 			ref="alphabet" 
 		>
 			<view :class="piece.title === alSelect ? 'alphabet_item_active' : 'alphabet_item'" v-for="(piece, index) in chatList" :key="piece.id" @click="()=>handleAlphabet(piece)">
@@ -58,7 +59,7 @@
 				chatList: [], // 通讯录列表
 				alphabetList: [], // 字母列表
 				alSelect: "", // 点击选中的字母
-				alHeight: -1, // 字母列表的高度
+				alHeight: 0, // 字母列表的高度
 				touchStartY: -1,	// 开始手势时的位置
 				touchEndY: -1,		// 结束手势时的位置
 			};
@@ -84,6 +85,14 @@
 					// #endif
 				},
 			}),
+			// 获取字母列表的垂直居中位置
+			getAlphabetPos: function() {
+				const navBarHeight = uni.upx2px(90)
+				const scrollHeight = parseInt(this.$store.state.app.height - this.$store.state.app.tipBarHeight - navBarHeight) /
+					2;
+				const top = scrollHeight - parseInt(this.alHeight) / 2
+				return `top: ${top}px`
+			}
 		},
 		created() {
 			this.funcList = chatFuncMenu
@@ -180,21 +189,16 @@
 	.alphabet {
 		position: fixed;
 		right: 0;
+		top: 0;
 		width: 45rpx;
 		z-index: 9999;
 		justify-content: center;
-		/* #ifndef APP-PLUS-NVUE */
-		top: 15%;
-		/* #endif */
-		/* #ifdef APP-PLUS-NVUE */
-		top: 200rpx;
-		/* #endif */
 	}
 
 	.alphabet_item {
-		width: 32rpx;
+		width: 36rpx;
 		@include center;
-		height: 32rpx;
+		height: 36rpx;
 	}
 	
 	.alphabet_item_active {

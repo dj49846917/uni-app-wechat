@@ -23,6 +23,9 @@ const chatFuncMenu = [
 
 const chatListData = [
 	{
+		title: "↑",
+	},
+	{
 		title: "A",
 		list: [
 			{
@@ -154,6 +157,14 @@ const chatListData = [
 		]
 	},
 	{
+		title: "I",
+		list: []
+	},
+	{
+		title: "J",
+		list: []
+	},
+	{
 		title: "K",
 		list: [
 			{
@@ -209,6 +220,18 @@ const chatListData = [
 				username: "马丽"
 			}
 		]
+	},
+	{
+		title: "N",
+		list: []
+	},
+	{
+		title: "O",
+		list: []
+	},
+	{
+		title: "P",
+		list: []
 	},
 	{
 		title: "Q",
@@ -287,6 +310,14 @@ const chatListData = [
 		]
 	},
 	{
+		title: "U",
+		list: []
+	},
+	{
+		title: "V",
+		list: []
+	},
+	{
 		title: "W",
 		list: [
 			{
@@ -328,6 +359,14 @@ const chatListData = [
 				username: "杨哥"
 			}
 		]
+	},
+	{
+		title: "Z",
+		list: []
+	},
+	{
+		title: "#",
+		list: []
 	},
 ]
 

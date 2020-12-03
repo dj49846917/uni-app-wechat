@@ -17,6 +17,8 @@ $clickLightColor: #f8f9fa;
 $clickDarkColor: #333;
 // icon图标的统一文字大小
 $iconSize: 60rpx;
+// 点击选中的背景颜色
+$selectedColor: #07c261;
 
 // 铺满屏幕的定位模式
 @mixin fixed {
