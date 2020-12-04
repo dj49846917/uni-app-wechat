@@ -1,19 +1,131 @@
 <template>
 	<view>
-		333
+		<!-- 状态栏 -->
+		<view class="tipBar" :style="getStatusBarHeight"></view>
+		<!-- 导航栏 -->
+		<my-nav :showMessageCount="false" title="发现"></my-nav>
+		<scroll-view scroll-y="true" :style="getScrollHeight" class="content">
+			<my-chat-list 
+				v-for="(item, index) in lookMenuList" 
+				:key="item.id" 
+				:item="item"
+				imgType="icon"
+				:isTurnToPage="true"
+				v-if="index === 0"
+			/>
+			<view class="sizedBox"></view>
+			<my-chat-list
+				v-for="(item, index) in lookMenuList" 
+				:key="item.id" 
+				:item="item"
+				imgType="icon"
+				:isTurnToPage="true"
+				v-if="index === 1"
+			/>
+			<view class="sizedBox"></view>
+			<my-chat-list
+				v-for="(item, index) in lookMenuList" 
+				:key="item.id" 
+				:item="item"
+				imgType="icon"
+				:isTurnToPage="true"
+				v-if="index === 2 || index === 3"
+			/>
+			<view class="sizedBox"></view>
+			<my-chat-list
+				v-for="(item, index) in lookMenuList" 
+				:key="item.id" 
+				:item="item"
+				imgType="icon"
+				:isTurnToPage="true"
+				v-if="index === 4 || index === 5"
+			/>
+			<view class="sizedBox"></view>
+			<my-chat-list
+				v-for="(item, index) in lookMenuList" 
+				:key="item.id" 
+				:item="item"
+				imgType="icon"
+				:isTurnToPage="true"
+				v-if="index === 6"
+			/>
+			<view class="sizedBox"></view>
+			<my-chat-list
+				v-for="(item, index) in lookMenuList" 
+				:key="item.id" 
+				:item="item"
+				imgType="icon"
+				:isTurnToPage="true"
+				v-if="index === 7 || index === 8"
+			/>
+			<view class="sizedBox"></view>
+			<my-chat-list
+				v-for="(item, index) in lookMenuList" 
+				:key="item.id" 
+				:item="item"
+				imgType="icon"
+				:isTurnToPage="true"
+				v-if="index === 9"
+			/>
+		</scroll-view>
 	</view>
 </template>
 
 <script>
+	import {
+		mapState
+	} from 'vuex'
+	import myNav from '@/component/myNav/myNav.nvue';
+	import myChatList from '@/component/myChatList/myChatList.nvue';
+	import { lookMenuData } from '@/static/data/look.js';
 	export default {
+		components: {
+			myNav,
+			myChatList
+		},
 		data() {
 			return {
-				
+				lookMenuList: []
 			};
+		},
+		computed: {
+			...mapState({
+				// 获取状态栏的高度
+				getStatusBarHeight: (state) => {
+					return `height: ${state.app.tipBarHeight}px`
+				},
+				// 获取可滚动区域的高度
+				getScrollHeight: (state) => {
+					const navBarHeight = uni.upx2px(90)
+					const tabBarHeight = uni.upx2px(110)
+					// #ifndef MP
+					const scrollHeight = state.app.height - state.app.tipBarHeight - navBarHeight - tabBarHeight;
+					return `height: ${scrollHeight}px`;
+					// #endif
+
+					// #ifdef MP
+					const scrollHeight2 = state.app.height - state.app.tipBarHeight - navBarHeight;
+					return `height: ${scrollHeight2}px`;
+					// #endif
+				},
+			}),
+		},
+		created() {
+			this.lookMenuList = lookMenuData
 		}
 	}
 </script>
 
 <style lang="scss">
+	@import "@/constant/css/constant.scss";
 
+	.tipBar {
+		@include tabBarStyle;
+	}
+	.content {
+		background-color: $boxBgColor;
+	}
+	.sizedBox {
+		@include splitLineBox;
+	}
 </style>

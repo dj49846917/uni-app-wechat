@@ -103,7 +103,6 @@
 			// #ifndef APP-PLUS-NVUE
 			let view = uni.createSelectorQuery().in(this).select(".alphabet");
 			view.boundingClientRect(data => {
-				console.log('data', data)
 				this.alHeight = data.height
 			}).exec();
 			// #endif
@@ -159,8 +158,7 @@
 	@import "@/constant/css/constant.scss";
 
 	.tipBar {
-		width: $boxWidth;
-		background-color: $boxBgColor;
+		@include tabBarStyle;
 	}
 
 	.chat_list_title {

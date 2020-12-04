@@ -1,10 +1,23 @@
 <template>
 	<view class="list_item" hover-class="list_light">
 		<view class="list_item_left">
-			<image :src="item.avatar ? item.avatar : defaultPic" mode="widthFix" class="list_item_box"></image>
+			<image v-if="imgType ==='img'" :src="item.avatar ? item.avatar : defaultPic" mode="widthFix" class="list_item_box"></image>
+			<text v-else class="iconfont list_item_box2">{{ item.icon }}</text>
 		</view>
 		<view class="list_item_right">
-			<text class="list_item_right_text">{{ item.val }}</text>
+			<text class="list_item_right_text" v-if="!isTurnToPage">{{ item.val }}</text>
+			<view v-else class="list_item_right_box">
+				<view class="list_item_right_info">
+					<text class="list_item_right_text">{{ item.val }}</text>
+					<view class="list_item_right_info_view" v-if="item.noReadInfo">
+						<view class="list_item_right_info_view_box" v-if="item.noReadInfo.text">
+							<text class="list_item_right_info_view_text">{{ item.noReadInfo.text  }}</text>
+						</view>
+						<image :src="item.noReadInfo.imgUrl" mode="widthFix" class="list_item_right_info_view_image"></image>
+					</view>
+				</view>
+				<text class="iconfont list_item_right_arrow">&#xe649;</text>
+			</view>
 		</view>
 	</view>
 </template>
@@ -19,6 +32,14 @@
 			item: {
 				type: Object,
 				default: {}
+			},
+			imgType: {
+				type: String,
+				default: "img"		// 图片类型: iconfont,img
+			},
+			isTurnToPage: {			// 是否展示右侧箭头和布局
+				type: Boolean,
+				default: false
 			}
 		},
 		data() {
@@ -32,7 +53,6 @@
 <style lang="scss">
 	@import "@/constant/css/constant.scss";
 	$listItemHeight: 105rpx;
-
 	.tipBar {
 		width: $boxWidth;
 		background-color: $boxBgColor;
@@ -42,6 +62,7 @@
 		width: $boxWidth;
 		height: $listItemHeight;
 		@include verticalCenter;
+		background-color: #fff;
 	}
 
 	.list_item_left {
@@ -49,10 +70,12 @@
 		height: $listItemHeight;
 		@include center;
 	}
-
 	.list_item_box {
 		width: 76rpx;
 		height: 76rpx;
+	}
+	.list_item_box2 {
+		font-size: 50rpx;
 	}
 
 	.list_item_icon {
@@ -62,13 +85,50 @@
 
 	.list_item_right {
 		flex: 1;
+		padding-right: 30rpx;
 		height: $listItemHeight;
 		@include borderBottom;
 		@include verticalCenter;
 		color: $listTitleColor;
 	}
-
+	.list_item_right_box {
+		flex: 1;
+		@include verticalCenter;
+	}
+	.list_item_right_info {
+		flex: 1;
+		@include verticalCenter;
+		justify-content: space-between;
+	}
+	.list_item_right_text {
+		color: $listTitleColor;
+		font-size: 30rpx;
+	}
+	.list_item_right_info_view {
+		width: 400rpx;
+		@include verticalCenter;
+		justify-content: flex-end;
+	}
+	.list_item_right_info_view_box {
+		width: 300rpx;
+		@include verticalCenter;
+		justify-content: flex-end;
+	}
+	.list_item_right_info_view_text {
+		width: 300rpx;
+		@include wordBreak;
+		font-size: 28rpx;
+		color: $listTextColor;
+	}
+	.list_item_right_info_view_image {
+		@include iconStyle;
+		margin-right: 10rpx;
+	}
 	.list_light {
 		background-color: $clickLightColor;
+	}
+	.list_item_right_arrow {
+		font-size: 28rpx;
+		color: $listTextColor;
 	}
 </style>
