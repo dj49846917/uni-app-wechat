@@ -31,6 +31,15 @@
             }
             
         }
+        ,{
+            "path" : "pages/chatDetail/chatDetail",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

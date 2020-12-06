@@ -1,5 +1,5 @@
 <template>
-	<scroll-view scroll-y="true" :style="getScrollHeight">
+	<scroll-view scroll-y="true" :style="getScrollHeight" class="content">
 		<block v-for="(item, index) in list" :key="item.id">
 			<view class="list" hover-class="list_light" v-if="item.isTop === 1" @longpress="(e)=>showListMenu(e, item, index)">
 				<view class="list_left_box">
@@ -20,7 +20,13 @@
 			</view>
 		</block>
 		<block v-for="(item, index) in list" :key="item.id">
-			<view class="list" hover-class="list_light" v-if="item.isTop === 2" @longpress="(e)=>showListMenu(e, item, index)">
+			<view 
+				class="list" 
+				hover-class="list_light" 
+				v-if="item.isTop === 2" 
+				@longpress="(e)=>showListMenu(e, item, index)"
+				@click="turnToDetail(item)"
+			>
 				<view class="list_left_box">
 					<image :src="item.avatar" class="list_icon" mode="widthFix"></image>
 					<view class="list_left_tip" v-if="Number(item.noreadnum) > 0">
@@ -106,6 +112,13 @@
 					item,
 					index
 				})
+			},
+			turnToDetail(item) {
+				console.log(item)
+				// 跳转页面
+				uni.navigateTo({
+					url: `/pages/chatDetail/chatDetail?id=${item.id}&title=${item.name}`
+				})
 			}
 		}
 	}
@@ -115,10 +128,15 @@
 	@import "@/constant/css/constant.scss";
 	$listHeight : 135rpx;
 
+	.content {
+		background-color: $boxBgColor;
+	}
+
 	.list {
 		width: 750rpx;
 		height: $listHeight;
 		@include verticalCenter;
+		background-color: #fff;
 	}
 
 	.list_light {

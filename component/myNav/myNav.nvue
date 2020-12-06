@@ -1,15 +1,16 @@
 <template>
 	<div>
-		<view class="nav">
+		<view class="nav" :style="'background-color:' +bgColor">
 			<view class="nav_title" v-if="showLeftTitle">
+				<text class="iconfont nav_title_back" v-if="showBackIcon" @click="back">{{ left_arrow }}</text>
 				<text class="nav_title_text">{{ title }}</text>
 				<text v-if="showMessageCount">{{ messageCount }}</text>
 			</view>
 			<view class="nav_icon_box">
-				<view class="nav_icon_item" @click="rightFirstFunc">
+				<view class="nav_icon_item" @click="rightFirstFunc" v-if="showRightFirstIcon">
 					<text class="iconfont nav_icon_box_search">{{ rightFirstSource }}</text>
 				</view>
-				<view class="nav_icon_item" @click="rightSecondFunc">
+				<view class="nav_icon_item" @click="rightSecondFunc" v-if="showRightSecondIcon">
 					<text class="iconfont nav_icon_box_add">{{ rightRightSource }}</text>
 				</view>
 			</view>
@@ -32,12 +33,19 @@
 
 <script>
 	import myModel from '@/component/myModel/myModel.nvue';
-	import { homeMenuData } from '@/static/data/home.js';
+	import Constant from '@/constant/js/const.js';
+	import {
+		homeMenuData
+	} from '@/static/data/home.js';
 	export default {
 		components: {
 			myModel
 		},
 		props: {
+			showBackIcon: {
+				type: Boolean,
+				default: false
+			},
 			// 是否导航栏的左侧标题
 			showLeftTitle: {
 				type: Boolean,
@@ -66,7 +74,7 @@
 			// 右侧第一个图标的内容
 			rightFirstSource: {
 				type: String,
-				default: "\ue698"
+				default: Constant.search_icon
 			},
 			// 是否展示右侧第二个图标
 			showRightSecondIcon: {
@@ -76,17 +84,27 @@
 			// 右侧第二个图标的内容
 			rightRightSource: {
 				type: String,
-				default: "\ue633"
+				default: Constant.add_icon
+			},
+			// 第二个Icon点击触发的事件类型： popUp:展示弹窗, chat: 聊天页控制，noPopUp: 不展示弹窗
+			secondFucType: {
+				type: String,
+				default: "popUp"
+			},
+			bgColor: {
+				type: String,
+				default: Constant.boxBgColor
 			}
 		},
 		data() {
 			return {
-				menuList: [],		// 菜单列表
+				menuList: [], // 菜单列表
+				left_arrow: Constant.left_arrow_icon, // 左箭头
 			}
 		},
 		created() {
 			// 获取数据
-			this.menuList = homeMenuData	
+			this.menuList = homeMenuData
 		},
 		methods: {
 			// 点击右侧第一个按钮
@@ -95,14 +113,28 @@
 			},
 			// 点击右侧第二个按钮
 			rightSecondFunc() {
-				// #ifdef APP-PLUS-NVUE
-					const height = uni.upx2px(113)+ this.$store.state.app.tipBarHeight
-					this.$refs.popUp.show(uni.upx2px(415), height)
-				// #endif
-				// #ifndef APP-PLUS-NVUE
-					this.$refs.popUp.show(uni.upx2px(415), uni.upx2px(113))
-				// #endif
+				switch (this.secondFucType){
+					case 'popUp': // 展示弹窗
+						// #ifdef APP-PLUS-NVUE
+						const height = uni.upx2px(113) + this.$store.state.app.tipBarHeight
+						this.$refs.popUp.show(uni.upx2px(415), height)
+						// #endif
+						// #ifndef APP-PLUS-NVUE
+						this.$refs.popUp.show(uni.upx2px(415), uni.upx2px(113))
+						// #endif
+						break;	
+					case 'noPopUp':	// 不展示弹窗
+						console.log('111')
+						break;
+					default:	// 其他事件
+						console.log("222")
+						break;
+				}
 			},
+			// 点击返回按钮
+			back() {
+				uni.navigateBack()
+			}
 		}
 	}
 </script>
@@ -110,6 +142,7 @@
 <style lang="scss">
 	@import "@/constant/css/constant.scss";
 	$menuItemHeight: 105rpx;
+
 	.nav {
 		width: $boxWidth;
 		background-color: $boxBgColor;
@@ -121,12 +154,21 @@
 	}
 
 	.nav_title {
+		width: 450rpx;
+		@include wordBreak;
 		flex-direction: row;
+	}
+
+	.nav_title_back {
+		margin-left: -10rpx;
+		margin-right: 20rpx;
+		font-size: 40rpx;
 	}
 
 	.nav_icon_box {
 		@include verticalCenter;
 	}
+
 	.nav_icon_item {
 		height: 90rpx;
 		width: 90rpx;
@@ -139,31 +181,38 @@
 
 	.nav_icon_box_add {
 		font-size: 56rpx;
-	},
+	}
+
+	,
 	.menu {
 		width: 320rpx;
 		height: 525rpx;
 		border-radius: 10rpx;
 	}
+
 	.menu_item {
 		flex: 1;
 		height: $menuItemHeight;
 		@include verticalCenter;
 	}
+
 	.menu_item_dark {
 		@extend .menu_item;
 		background-color: $clickDarkColor;
 	}
+
 	.menu_icon {
 		width: 106rpx;
 		height: $menuItemHeight;
 		@include center;
 		padding-left: 10rpx;
 	}
+
 	.menu_icon_item {
 		font-size: 45rpx;
 		color: #fff;
 	}
+
 	.menu_text_box {
 		flex: 1;
 		height: $menuItemHeight;
@@ -172,6 +221,7 @@
 		border-bottom-width: 1rpx;
 		border-style: solid;
 	}
+
 	.menu_text {
 		flex: 1;
 		color: #fff;

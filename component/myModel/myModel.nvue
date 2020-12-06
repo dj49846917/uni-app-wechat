@@ -10,6 +10,7 @@
 </template>
 
 <script>
+	import Constant from '../../constant/js/const.js';
 	export default {
 		props: {
 			// 是否展示蒙版
@@ -19,7 +20,7 @@
 			// 是否内容展示在底部
 			isBottom: { type: Boolean, default: false },
 			// 内容的背景颜色
-			bodyBgColor: { type: String, default: '#fff' },
+			bodyBgColor: { type: String, default: Constant.boxWhiteBgColor },
 			// 弹出层内容宽度
 			bodyWidth:{ type:Number, default:0 },
 			// 弹出层内容高度

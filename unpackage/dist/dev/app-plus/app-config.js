@@ -87,9 +87,9 @@
 /************************************************************************/
 /******/ ([
 /* 0 */
-/*!**********************************************!*\
-  !*** F:/myproject/uni-app-wechat/pages.json ***!
-  \**********************************************/
+/*!****************************************!*\
+  !*** F:/git/uni-app-wechat/pages.json ***!
+  \****************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -109,6 +109,7 @@ if (typeof Promise !== 'undefined' && !Promise.prototype.finally) {
 if(uni.restoreGlobal){
   uni.restoreGlobal(weex,plus,setTimeout,clearTimeout,setInterval,clearInterval)
 }
+
 
 
 

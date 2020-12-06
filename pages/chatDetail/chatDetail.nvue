@@ -1,0 +1,132 @@
+<template>
+	<view>
+		<!-- 状态栏 -->
+		<view class="tipBar" :style="getStatusBarHeight"></view>
+		<!-- 导航栏 -->
+		<my-nav 
+			showBackIcon 
+			:showMessageCount="false" 
+			:title="navTitle" 
+			:showRightFirstIcon="false"
+			:rightRightSource="more_menu_icon"
+			secondFucType="chat"
+		/>
+		<scroll-view scroll-y="true" :style="getScrollHeight">
+			<view class="acc_content2">1</view>
+			<view class="acc_content2">2</view>
+			<view class="acc_content2">3</view>
+			<view class="acc_content2">4</view>
+			<view class="acc_content2">5</view>
+		</scroll-view>
+		<view class="acc_bottom">
+			<view class="acc_bottom_sound">
+				<text class="iconfont acc_bottom_sound_icon">{{ sound_icon }}</text>
+			</view>
+			<input type="text" value="222" class="acc_bottom_input" />
+			<view class="acc_bottom_iconBox">
+				<text class="iconfont icon_emoji">{{ emoji_icon }}</text>
+				<text class="iconfont icon_add">{{ add_icon }}</text>
+			</view>
+		</view>
+	</view>
+</template>
+
+<script>
+	import {
+		mapState
+	} from 'vuex'
+	import myNav from '@/component/myNav/myNav.nvue';
+	import Constant from '@/constant/js/const.js';
+	export default {
+		components: {
+			myNav
+		},
+		data() {
+			return {
+				navTitle: "",
+				id: "",
+				more_menu_icon: Constant.more_icon,		// 更多
+				sound_icon: Constant.sound_icon,		// 语音
+				emoji_icon: Constant.emoji_icon,		// 表情
+				add_icon: Constant.add_icon,			// 更多
+			};
+		},
+		computed: {
+			...mapState({
+				// 获取状态栏的高度
+				getStatusBarHeight: (state) => {
+					return `height: ${state.app.tipBarHeight}px`
+				},
+				// 获取滚动区域的高度
+				getScrollHeight: (state)=> {
+					const bottomHeight = uni.upx2px(108); // 底部高度
+					const tipBarHeight = state.app.tipBarHeight; // 状态栏高度
+					const navBarHeight = uni.upx2px(90);		// 导航栏高度
+					// #ifndef MP
+					const scollHeight = state.app.height - tipBarHeight - navBarHeight - bottomHeight
+					return `height: ${scollHeight}px`
+					// #endif
+					
+					// #ifdef MP
+					const windowHeight = uni.getSystemInfoSync().windowHeight
+					const scollHeight = windowHeight - tipBarHeight - navBarHeight - bottomHeight
+					return `height: ${scollHeight}px`
+					// #endif
+				}
+			}),
+		},
+		onLoad(option) {
+			console.log('option', option)
+			this.navTitle= option.title
+			this.id = option.id
+		}
+	}
+</script>
+
+<style lang="scss">
+	@import "@/constant/css/constant.scss";
+
+	.tipBar {
+		@include tabBarStyle;
+	}
+	.acc_content2 {
+		height: 400rpx;
+		background-color: red;
+	}
+	.acc_bottom {
+		width: $boxWidth;
+		height: 106rpx;
+		@include borderTop;
+		background-color: $boxBgColor;
+		@include verticalCenter;
+	}
+	.acc_bottom_sound {
+		width: 92rpx;
+		height: 92rpx;
+		@include verticalCenter;
+		padding-left: 20rpx;
+	}
+	.acc_bottom_sound_icon {
+		font-size: 50rpx;
+	}
+	.acc_bottom_input {
+		width: 488rpx;
+		height: 72rpx;
+		background-color: #fff;
+		border-radius: 10rpx;
+		padding-left: 20rpx;
+	}
+	.acc_bottom_iconBox {
+		flex: 1;
+		@include verticalCenter;
+		justify-content: flex-end;
+		padding-right: 20rpx;
+	}
+	.icon_emoji {
+		@extend .acc_bottom_sound_icon;
+		margin-right: 22rpx;
+	}
+	.icon_add {
+		font-size: 54rpx;
+	}
+</style>

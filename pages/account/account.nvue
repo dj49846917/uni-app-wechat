@@ -1,9 +1,43 @@
 <template>
-	<view class="container">
+	<view>
 		<!-- 状态栏 -->
 		<view class="tipBar" :style="getStatusBarHeight"></view>
 		<!-- 导航栏 -->
-		<my-nav :showMessageCount="false" title="发现"></my-nav>
+		<my-nav :showMessageCount="false" :showRightFirstIcon="false" :title="null" :rightRightSource="navMenuIcon" secondFucType="noPopUp"
+		 bgColor="#fff" />
+		<!-- 菜单 -->
+		<scroll-view scroll-y="true" :style="getScrollHeight" class="content">
+			<!-- 用户头像 -->
+			<view class="acc_box">
+				<view class="acc_box_left">
+					<image :src="userIconUrl" mode="widthFix" class="acc_box_left_icon"></image>
+				</view>
+				<view class="acc_box_right">
+					<view class="acc_box_right_name">
+						<text class="acc_box_right_name_text">一笑*奈何</text>
+					</view>
+					<view class="acc_box_right_info">
+						<view class="acc_box_right_info_num">
+							<text class="acc_box_right_info_text">微信号：dj49846917</text>
+						</view>
+						<view class="acc_box_right_info_icon">
+							<text class="iconfont acc_icon_scale">{{ scaleCodeIcon }}</text>
+							<text class="iconfont acc_icon_arrow">{{ arrowIcon}} </text>
+						</view>
+					</view>
+				</view>
+			</view>
+			<view class="sizedBox"></view>
+			<my-chat-list v-for="(item, index) in menuList" :key="item.id" :item="item" imgType="icon" :isTurnToPage="true"
+			 v-if="index === 0" />
+			<view class="sizedBox"></view>
+			<my-chat-list v-for="(item, index) in menuList" :key="item.id" :item="item" imgType="icon" :isTurnToPage="true"
+			 v-if="index === 1 || index === 2 || index === 3 || index === 4" />
+			<view class="sizedBox"></view>
+			<my-chat-list v-for="(item, index) in menuList" :key="item.id" :item="item" imgType="icon" :isTurnToPage="true"
+			 v-if="index === 5" />
+			<view class="sizedBox"></view>
+		</scroll-view>
 	</view>
 </template>
 
@@ -12,13 +46,23 @@
 		mapState
 	} from 'vuex';
 	import myNav from '@/component/myNav/myNav.nvue';
+	import {
+		accountMenuData
+	} from '@/static/data/account.js';
+	import myChatList from '@/component/myChatList/myChatList.nvue';
+	import Constant from '@/constant/js/const.js';
 	export default {
 		components: {
-			myNav
+			myNav,
+			myChatList
 		},
 		data() {
 			return {
-				
+				navMenuIcon: Constant.camera_icon, // 相机的图标
+				userIconUrl: Constant.default_user_icon_url, // 默认用户图片
+				scaleCodeIcon: Constant.scale_code_icon, // 扫码Icon
+				arrowIcon: Constant.right_arrow_icon, // 右箭头
+				menuList: accountMenuData, // 菜单列表
 			}
 		},
 		computed: {
@@ -35,7 +79,7 @@
 					const scrollHeight = state.app.height - state.app.tipBarHeight - navBarHeight - tabBarHeight;
 					return `height: ${scrollHeight}px`;
 					// #endif
-		
+
 					// #ifdef MP
 					const scrollHeight2 = state.app.height - state.app.tipBarHeight - navBarHeight;
 					return `height: ${scrollHeight2}px`;
@@ -44,14 +88,82 @@
 			}),
 		},
 		methods: {
-			
+
 		}
 	}
 </script>
 
 <style lang="scss">
 	@import "@/constant/css/constant.scss";
-	.container {
+	$userBoxHeight: 235rpx;
+	.tipBar {
+		width: $boxWidth;
+		background-color: #fff;
+	}
+	.content {
+		background-color: $boxBgColor;
+	}
+	.acc_box {
+		height: $userBoxHeight;
+		width: $boxWidth;
+		background-color: #fff;
+		@include verticalCenter;
+	}
+
+	.acc_box_left {
+		width: 196rpx;
+		height: $userBoxHeight;
+		padding-left: 30rpx;
 		@include center;
+	}
+
+	.acc_box_left_icon {
+		width: 120rpx;
+		height: 120rpx;
+	}
+
+	.acc_box_right {
+		flex: 1;
+		padding-right: 30rpx;
+	}
+
+	.acc_box_right_name {
+		margin-bottom: 15rpx;
+	}
+
+	.acc_box_right_name_text {
+		font-size: 38rpx;
+		@include wordBreak;
+	}
+
+	.acc_box_right_info {
+		@include verticalCenter;
+		justify-content: space-between;
+	}
+
+	.acc_box_right_info_num {
+		width: 410rpx;
+	}
+
+	.acc_box_right_info_text {
+		@include listText;
+		@include wordBreak;
+	}
+
+	.acc_box_right_info_icon {
+		@include verticalCenter;
+	}
+
+	.acc_icon_scale {
+		color: $listTextColor;
+		font-size: 40rpx;
+		margin-right: 20rpx;
+	}
+
+	.acc_icon_arrow {
+		@include listText;
+	}
+	.sizedBox {
+		@include splitLineBox;
 	}
 </style>

@@ -16,13 +16,14 @@
 						<image :src="item.noReadInfo.imgUrl" mode="widthFix" class="list_item_right_info_view_image"></image>
 					</view>
 				</view>
-				<text class="iconfont list_item_right_arrow">&#xe649;</text>
+				<text class="iconfont list_item_right_arrow">{{ arrow_icon }}</text>
 			</view>
 		</view>
 	</view>
 </template>
 
 <script>
+	import Constant from '@/constant/js/const.js'
 	export default {
 		props: {
 			index: {
@@ -35,16 +36,17 @@
 			},
 			imgType: {
 				type: String,
-				default: "img"		// 图片类型: iconfont,img
+				default: "img" // 图片类型: iconfont,img
 			},
-			isTurnToPage: {			// 是否展示右侧箭头和布局
+			isTurnToPage: { // 是否展示右侧箭头和布局
 				type: Boolean,
 				default: false
 			}
 		},
 		data() {
 			return {
-				defaultPic: '/static/images/userpic.png'
+				defaultPic: Constant.default_user_icon_url,				// 默认的用户图片
+				arrow_icon: Constant.right_arrow_icon					// 右箭头
 			}
 		}
 	}
@@ -53,6 +55,7 @@
 <style lang="scss">
 	@import "@/constant/css/constant.scss";
 	$listItemHeight: 105rpx;
+
 	.tipBar {
 		width: $boxWidth;
 		background-color: $boxBgColor;
@@ -70,10 +73,12 @@
 		height: $listItemHeight;
 		@include center;
 	}
+
 	.list_item_box {
 		width: 76rpx;
 		height: 76rpx;
 	}
+
 	.list_item_box2 {
 		font-size: 50rpx;
 	}
@@ -91,44 +96,52 @@
 		@include verticalCenter;
 		color: $listTitleColor;
 	}
+
 	.list_item_right_box {
 		flex: 1;
 		@include verticalCenter;
 	}
+
 	.list_item_right_info {
 		flex: 1;
 		@include verticalCenter;
 		justify-content: space-between;
 	}
+
 	.list_item_right_text {
 		color: $listTitleColor;
 		font-size: 30rpx;
 	}
+
 	.list_item_right_info_view {
 		width: 400rpx;
 		@include verticalCenter;
 		justify-content: flex-end;
 	}
+
 	.list_item_right_info_view_box {
 		width: 300rpx;
 		@include verticalCenter;
 		justify-content: flex-end;
 	}
+
 	.list_item_right_info_view_text {
 		width: 300rpx;
 		@include wordBreak;
 		font-size: 28rpx;
 		color: $listTextColor;
 	}
+
 	.list_item_right_info_view_image {
 		@include iconStyle;
 		margin-right: 10rpx;
 	}
+
 	.list_light {
 		background-color: $clickLightColor;
 	}
+
 	.list_item_right_arrow {
-		font-size: 28rpx;
-		color: $listTextColor;
+		@include arrowStyle;
 	}
 </style>
