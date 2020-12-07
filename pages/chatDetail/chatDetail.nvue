@@ -12,11 +12,29 @@
 			secondFucType="chat"
 		/>
 		<scroll-view scroll-y="true" :style="getScrollHeight">
-			<view class="acc_content2">1</view>
-			<view class="acc_content2">2</view>
-			<view class="acc_content2">3</view>
-			<view class="acc_content2">4</view>
-			<view class="acc_content2">5</view>
+			<view class="chat_item">
+				<view class="chat_item_time">
+					<text class="chat_item_time_text">上午9:45</text>
+				</view>
+				<view class="chat_item_other">
+					<image :src="otherImg" class="chat_item_other_icon" />
+					<view class="chat_item_other_box">
+						<text class="iconfont chat_item_other_box_icon">{{ left_icon }}</text>
+						<view class="chat_item_other_box_content">
+							<text class="chat_item_other_box_content_text">我11111的我11111的我11111的我11111的我11111的我11111的</text>
+						</view>
+					</view>
+				</view>
+				<view class="chat_item_my">
+					<view class="chat_item_my_box">
+						<text class="iconfont chat_item_my_box_icon">{{ right_icon }}</text>
+						<view class="chat_item_other_box_content">
+							<text class="chat_item_other_box_content_text">我的11111我的11111我的11111我的11111我的11111我的11111我的11111</text>
+						</view>
+					</view>
+					<image :src="myImg" class="chat_item_my_icon" />
+				</view>
+			</view>
 		</scroll-view>
 		<view class="acc_bottom">
 			<view class="acc_bottom_sound">
@@ -49,6 +67,10 @@
 				sound_icon: Constant.sound_icon,		// 语音
 				emoji_icon: Constant.emoji_icon,		// 表情
 				add_icon: Constant.add_icon,			// 更多
+				otherImg: "/static/images/user_other.jpg",			// 别人
+				myImg: "/static/images/userpic.jpg",				// 自己
+				left_icon: Constant.left_sound,						// 左三角
+				right_icon: Constant.right_sound,					// 右三角
 			};
 		},
 		computed: {
@@ -64,13 +86,13 @@
 					const navBarHeight = uni.upx2px(90);		// 导航栏高度
 					// #ifndef MP
 					const scollHeight = state.app.height - tipBarHeight - navBarHeight - bottomHeight
-					return `height: ${scollHeight}px`
+					return `height: ${scollHeight}px; background-color: ${Constant.boxBgColor};`
 					// #endif
 					
 					// #ifdef MP
 					const windowHeight = uni.getSystemInfoSync().windowHeight
 					const scollHeight = windowHeight - tipBarHeight - navBarHeight - bottomHeight
-					return `height: ${scollHeight}px`
+					return `height: ${scollHeight}px; background-color: ${Constant.boxBgColor};`
 					// #endif
 				}
 			}),
@@ -93,6 +115,73 @@
 		height: 400rpx;
 		background-color: red;
 	}
+	.chat_item_time {
+		height: 98rpx;
+		width: $boxWidth;
+		@include center;
+	}
+	.chat_item_time_text {
+		font-size: 24rpx;
+		color: $listTextColor;
+	}
+	.chat_item_other {
+		flex-direction: row;
+		align-items: flex-start;
+		margin-bottom: 19rpx;
+	}
+	.chat_item_my {
+		flex-direction: row;
+		align-items: flex-start;
+		justify-content: flex-end;
+		margin-bottom: 19rpx;
+	}
+	.chat_item_other_icon {
+		width: 76rpx;
+		height: 76rpx;
+		border-radius: 8rpx;
+		margin-left: 22rpx;
+	}
+	.chat_item_my_icon {
+		@extend .chat_item_other_icon;
+		margin-left: 0;
+		margin-right: 22rpx;
+	}
+	.chat_item_other_box {
+		padding-left: 22rpx;
+		position: relative;
+	}
+	.chat_item_my_box {
+		padding-right: 22rpx;
+		position: relative;
+	}
+	.chat_item_my_box {
+		padding-left: 22rpx;
+		position: relative;
+	}
+	.chat_item_other_box_icon {
+		position: absolute;
+		top: 20rpx;
+		left: 0rpx;
+		color: #fff;
+	}
+	.chat_item_my_box_icon {
+		position: absolute;
+		top: 20rpx;
+		right: 0rpx;
+		color: #fff;
+	}
+	.chat_item_other_box_content {
+		max-width: 510rpx;
+		border-radius: 8rpx;
+		padding: 19rpx;
+		background-color: #fff;
+	}
+	.chat_item_other_box_content_text {
+		font-size: 32rpx;
+		color: $listTitleColor;
+	}
+	
+	
 	.acc_bottom {
 		width: $boxWidth;
 		height: 106rpx;
