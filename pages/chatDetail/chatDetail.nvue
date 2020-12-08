@@ -3,47 +3,34 @@
 		<!-- 状态栏 -->
 		<view class="tipBar" :style="getStatusBarHeight"></view>
 		<!-- 导航栏 -->
-		<my-nav 
-			showBackIcon 
-			:showMessageCount="false" 
-			:title="navTitle" 
-			:showRightFirstIcon="false"
-			:rightRightSource="more_menu_icon"
-			secondFucType="chat"
-		/>
+		<view :style="getNavBarPosition">
+			<my-nav showBackIcon :showMessageCount="false" :title="navTitle" :showRightFirstIcon="false" :rightRightSource="more_menu_icon"
+			 secondFucType="chat" />
+		</view>
 		<scroll-view scroll-y="true" :style="getScrollHeight">
-			<view class="chat_item">
-				<view class="chat_item_time">
-					<text class="chat_item_time_text">上午9:45</text>
-				</view>
-				<view class="chat_item_other">
-					<image :src="otherImg" class="chat_item_other_icon" />
-					<view class="chat_item_other_box">
-						<text class="iconfont chat_item_other_box_icon">{{ left_icon }}</text>
-						<view class="chat_item_other_box_content">
-							<text class="chat_item_other_box_content_text">我11111的我11111的我11111的我11111的我11111的我11111的</text>
-						</view>
-					</view>
-				</view>
-				<view class="chat_item_my">
-					<view class="chat_item_my_box">
-						<text class="iconfont chat_item_my_box_icon">{{ right_icon }}</text>
-						<view class="chat_item_other_box_content">
-							<text class="chat_item_other_box_content_text">我的11111我的11111我的11111我的11111我的11111我的11111我的11111</text>
-						</view>
-					</view>
-					<image :src="myImg" class="chat_item_my_icon" />
+			<view :style="getScrollHeight" @click="closeKeyBoard">
+				<view class="chat_item">
+					<chat-item-list></chat-item-list>
 				</view>
 			</view>
 		</scroll-view>
-		<view class="acc_bottom">
-			<view class="acc_bottom_sound">
-				<text class="iconfont acc_bottom_sound_icon">{{ sound_icon }}</text>
+		<view class="acc_bottom" :style="'bottom:' +keyBoardHeight+'px'">
+			<view class="acc_bottom_sound" @click="handleAudio">
+				<text class="iconfont acc_bottom_sound_icon" v-if="showAudioWord === 1">{{ sound_down }}</text>
+				<text class="iconfont acc_bottom_sound_icon" v-else>{{ sound_icon }}</text>
 			</view>
-			<input type="text" value="222" class="acc_bottom_input" />
+			<view class="acc_bottom_input acc_bottom_box" v-if="showAudioWord === 1">
+				<text class="acc_bottom_box_text">按住 说话</text>
+			</view>
+			<input v-else :focus="isShowInitKeyBoard===1" v-model="chatValue" ref="input" type="text" :class="showSendBtn === 2 ? 'acc_bottom_input' : 'acc_bottom_input2'"
+			 @focus="upKeyBoarrd" :adjust-position="false" @input="handleInput" />
 			<view class="acc_bottom_iconBox">
 				<text class="iconfont icon_emoji">{{ emoji_icon }}</text>
-				<text class="iconfont icon_add">{{ add_icon }}</text>
+				<text class="iconfont icon_add" v-if="showSendBtn === 2">{{ add_icon }}</text>
+				<!-- <button class="acc_bottom_iconBox_send" v-else type="default">发送</button> -->
+				<view class="button" v-else>
+					<text class="button_text">发送</text>
+				</view>
 			</view>
 		</view>
 	</view>
@@ -55,52 +42,112 @@
 	} from 'vuex'
 	import myNav from '@/component/myNav/myNav.nvue';
 	import Constant from '@/constant/js/const.js';
+	import chatItemList from "@/pages/chatDetail/chatItemList.nvue";
 	export default {
 		components: {
-			myNav
+			myNav,
+			chatItemList
 		},
 		data() {
 			return {
 				navTitle: "",
 				id: "",
-				more_menu_icon: Constant.more_icon,		// 更多
-				sound_icon: Constant.sound_icon,		// 语音
-				emoji_icon: Constant.emoji_icon,		// 表情
-				add_icon: Constant.add_icon,			// 更多
-				otherImg: "/static/images/user_other.jpg",			// 别人
-				myImg: "/static/images/userpic.jpg",				// 自己
-				left_icon: Constant.left_sound,						// 左三角
-				right_icon: Constant.right_sound,					// 右三角
+				more_menu_icon: Constant.more_icon, // 更多
+				sound_icon: Constant.sound_icon, // 语音
+				sound_down: Constant.audio_down, // 收起语音
+				emoji_icon: Constant.emoji_icon, // 表情
+				add_icon: Constant.add_icon, // 更多
+				keyBoardHeight: 0, // 键盘的高度
+				chatValue: '', // 输入的内容
+				showSendBtn: 2, // 是否展示发送按钮
+				showAudioWord: 2, // 是否展示语音文字
+				isShowInitKeyBoard: 2, // 是否自动展示键盘
 			};
 		},
 		computed: {
 			...mapState({
 				// 获取状态栏的高度
 				getStatusBarHeight: (state) => {
-					return `height: ${state.app.tipBarHeight}px`
+					return `height: ${state.app.tipBarHeight}px;`
+				},
+				getNavBarPosition: (state) => {
+					return `position: fixed; top: ${state.app.tipBarHeight}px`
 				},
 				// 获取滚动区域的高度
-				getScrollHeight: (state)=> {
-					const bottomHeight = uni.upx2px(108); // 底部高度
+				getScrollHeight: (state) => {
+					const bottomHeight = uni.upx2px(106); // 底部高度
 					const tipBarHeight = state.app.tipBarHeight; // 状态栏高度
-					const navBarHeight = uni.upx2px(90);		// 导航栏高度
+					const navBarHeight = uni.upx2px(90); // 导航栏高度
+					const top = tipBarHeight + navBarHeight
 					// #ifndef MP
 					const scollHeight = state.app.height - tipBarHeight - navBarHeight - bottomHeight
-					return `height: ${scollHeight}px; background-color: ${Constant.boxBgColor};`
+					return `width: 750rpx; height: ${scollHeight}px; background-color: ${Constant.boxBgColor}; position: fixed; top: ${top}px;`
 					// #endif
-					
+
 					// #ifdef MP
 					const windowHeight = uni.getSystemInfoSync().windowHeight
 					const scollHeight = windowHeight - tipBarHeight - navBarHeight - bottomHeight
-					return `height: ${scollHeight}px; background-color: ${Constant.boxBgColor};`
+					return `width: 750rpx; height: ${scollHeight}px; background-color: ${Constant.boxBgColor}; position: fixed; top: ${top}px;`
 					// #endif
 				}
-			}),
+			})
 		},
+		// 获取页面传入的参数
 		onLoad(option) {
-			console.log('option', option)
-			this.navTitle= option.title
+			this.navTitle = option.title
 			this.id = option.id
+		},
+		created() {
+			if (this.chatValue) {
+				this.isShowInitKeyBoard = 1
+			}
+		},
+		mounted() {
+			// 监听键盘高度变化
+			uni.onKeyboardHeightChange(res => {
+				this.$store.commit("app/setKeyBoardHeight", res.height)
+				this.keyBoardHeight = res.height
+			})
+		},
+		methods: {
+			// 输入框获取焦点
+			upKeyBoarrd() {
+				this.keyBoardHeight = this.$store.state.app.keyBoardHeight
+			},
+			// 点击scroll-view区域清除键盘高度
+			closeKeyBoard() {
+				uni.hideKeyboard()
+				this.keyBoardHeight = 0
+			},
+			// 输入框输入内容
+			handleInput(e) {
+				this.chatValue = e.detail.value
+				if (e.detail.value) {
+					this.showSendBtn = 1
+					this.isShowInitKeyBoard = 1
+				} else {
+					this.showSendBtn = 2
+					this.isShowInitKeyBoard = 2
+				}
+			},
+			// 点击语音按钮
+			handleAudio() {
+				if (this.showAudioWord === 2) {
+					this.showAudioWord = 1
+					this.showSendBtn = 2
+					this.isShowInitKeyBoard = 2
+					uni.hideKeyboard()
+				} else {
+					this.showAudioWord = 2
+					if (this.chatValue) {
+						this.showSendBtn = 1
+						this.isShowInitKeyBoard = 1
+					} else {
+						this.showSendBtn = 2
+						this.isShowInitKeyBoard = 2
+					}
+				}
+			}
 		}
 	}
 </script>
@@ -110,94 +157,115 @@
 
 	.tipBar {
 		@include tabBarStyle;
+		position: fixed;
+		top: 0;
 	}
+
 	.acc_content2 {
 		height: 400rpx;
 		background-color: red;
 	}
+
 	.chat_item_time {
 		height: 98rpx;
 		width: $boxWidth;
 		@include center;
 	}
+
 	.chat_item_time_text {
 		font-size: 24rpx;
 		color: $listTextColor;
 	}
+
 	.chat_item_other {
 		flex-direction: row;
 		align-items: flex-start;
 		margin-bottom: 19rpx;
 	}
+
 	.chat_item_my {
 		flex-direction: row;
 		align-items: flex-start;
 		justify-content: flex-end;
 		margin-bottom: 19rpx;
 	}
+
 	.chat_item_other_icon {
 		width: 76rpx;
 		height: 76rpx;
 		border-radius: 8rpx;
 		margin-left: 22rpx;
 	}
+
 	.chat_item_my_icon {
 		@extend .chat_item_other_icon;
 		margin-left: 0;
 		margin-right: 22rpx;
 	}
+
 	.chat_item_other_box {
 		padding-left: 22rpx;
 		position: relative;
 	}
+
 	.chat_item_my_box {
 		padding-right: 22rpx;
 		position: relative;
 	}
+
 	.chat_item_my_box {
 		padding-left: 22rpx;
 		position: relative;
 	}
+
 	.chat_item_other_box_icon {
-		position: absolute;
+		position: fixed;
 		top: 20rpx;
 		left: 0rpx;
 		color: #fff;
 	}
+
 	.chat_item_my_box_icon {
-		position: absolute;
+		position: fixed;
 		top: 20rpx;
 		right: 0rpx;
 		color: #fff;
 	}
+
 	.chat_item_other_box_content {
 		max-width: 510rpx;
 		border-radius: 8rpx;
 		padding: 19rpx;
 		background-color: #fff;
 	}
+
 	.chat_item_other_box_content_text {
 		font-size: 32rpx;
 		color: $listTitleColor;
 	}
-	
-	
+
+
 	.acc_bottom {
 		width: $boxWidth;
+		position: fixed;
+		bottom: 0;
 		height: 106rpx;
 		@include borderTop;
 		background-color: $boxBgColor;
 		@include verticalCenter;
 	}
+
 	.acc_bottom_sound {
 		width: 92rpx;
 		height: 92rpx;
 		@include verticalCenter;
 		padding-left: 20rpx;
 	}
+
 	.acc_bottom_sound_icon {
 		font-size: 50rpx;
 	}
+
 	.acc_bottom_input {
 		width: 488rpx;
 		height: 72rpx;
@@ -205,17 +273,55 @@
 		border-radius: 10rpx;
 		padding-left: 20rpx;
 	}
+
+	.acc_bottom_box {
+		@extend .acc_bottom_input;
+		@include center;
+	}
+
+	.acc_bottom_box_text {
+		font-size: 28rpx;
+	}
+
+	.acc_bottom_input2 {
+		@extend .acc_bottom_input;
+		width: 430rpx;
+	}
+
 	.acc_bottom_iconBox {
 		flex: 1;
 		@include verticalCenter;
 		justify-content: flex-end;
 		padding-right: 20rpx;
 	}
+
 	.icon_emoji {
 		@extend .acc_bottom_sound_icon;
 		margin-right: 22rpx;
 	}
+
 	.icon_add {
 		font-size: 54rpx;
+	}
+
+	.acc_bottom_iconBox_send {
+		width: 114rpx;
+		height: 72rpx;
+		background-color: $selectedColor;
+		font-size: 28rpx;
+		color: #fff;
+	}
+
+	.button {
+		background-color: $selectedColor;
+		width: 114rpx;
+		height: 70rpx;
+		border-radius: 8rpx;
+		@include center;
+	}
+
+	.button_text {
+		font-size: 30rpx;
+		color: #fff;
 	}
 </style>

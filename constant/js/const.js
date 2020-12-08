@@ -12,7 +12,8 @@ const Constant = {
 	sound_icon: "\ue888",													// 语音
 	emoji_icon: "\ue61e",													// 表情
 	left_sound: "\ue67f",													// 左三角
-	right_sound: "\ue67d"													// 右三角
+	right_sound: "\ue67d",													// 右三角
+	audio_down: "\ue652",													// 键盘收起
 }
 
 export default Constant;

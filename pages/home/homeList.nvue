@@ -114,7 +114,6 @@
 				})
 			},
 			turnToDetail(item) {
-				console.log(item)
 				// 跳转页面
 				uni.navigateTo({
 					url: `/pages/chatDetail/chatDetail?id=${item.id}&title=${item.name}`

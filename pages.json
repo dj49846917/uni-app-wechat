@@ -3,44 +3,36 @@
 		{
 			"path": "pages/home/home",
 			"style": {}
+		}, {
+			"path": "pages/chat/chat",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/look/look",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/account/account",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/chatDetail/chatDetail",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+
 		}
-	    ,{
-            "path" : "pages/chat/chat",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/look/look",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/account/account",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/chatDetail/chatDetail",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-    ],
+	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "",
@@ -52,42 +44,41 @@
 		}
 	},
 	"tabBar": {
-	    "color": "#000000",
-	    "selectedColor": "#07c261",
-	    "backgroundColor": "#ffffff",
-	    "list": [{
-	        "pagePath": "pages/home/home",
-	        "iconPath": "static/images/index.png",
-	        "selectedIconPath": "static/images/index-select.png",
-	        "text": "微信"
-	    }, 
-		{
-	        "pagePath": "pages/chat/chat",
-	        "iconPath": "static/images/mail.png",
-	        "selectedIconPath": "static/images/mail-select.png",
-	        "text": "通讯录"
-	    },
-		{
-		    "pagePath": "pages/look/look",
-		    "iconPath": "static/images/find.png",
-		    "selectedIconPath": "static/images/find-select.png",
-		    "text": "发现"
-		},
-		{
-		    "pagePath": "pages/account/account",
-		    "iconPath": "static/images/my.png",
-		    "selectedIconPath": "static/images/my-select.png",
-		    "text": "我"
-		}]
-	},
-	"condition" : { //模式配置，仅开发期间生效
-		"current": 0, //当前激活的模式(list 的索引项)
-		"list": [
+		"color": "#000000",
+		"selectedColor": "#07c261",
+		"backgroundColor": "#ffffff",
+		"list": [{
+				"pagePath": "pages/home/home",
+				"iconPath": "static/images/index.png",
+				"selectedIconPath": "static/images/index-select.png",
+				"text": "微信"
+			},
 			{
-				"name": "", //模式名称
-				"path": "", //启动页面，必选
-				"query": "" //启动参数，在页面的onLoad函数里面得到
+				"pagePath": "pages/chat/chat",
+				"iconPath": "static/images/mail.png",
+				"selectedIconPath": "static/images/mail-select.png",
+				"text": "通讯录"
+			},
+			{
+				"pagePath": "pages/look/look",
+				"iconPath": "static/images/find.png",
+				"selectedIconPath": "static/images/find-select.png",
+				"text": "发现"
+			},
+			{
+				"pagePath": "pages/account/account",
+				"iconPath": "static/images/my.png",
+				"selectedIconPath": "static/images/my-select.png",
+				"text": "我"
 			}
 		]
+	},
+	"condition": { //模式配置，仅开发期间生效
+		"current": 0, //当前激活的模式(list 的索引项)
+		"list": [{
+			"name": "", //模式名称
+			"path": "", //启动页面，必选
+			"query": "" //启动参数，在页面的onLoad函数里面得到
+		}]
 	}
 }
