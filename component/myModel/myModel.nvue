@@ -89,7 +89,7 @@
 }
 .model_bottom {
 	@include fixed;
-	background-color: #fff;
-	height: 300rpx;
+	top: auto;
+	width: $boxWidth;
 }
 </style>

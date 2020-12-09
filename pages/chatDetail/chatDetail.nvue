@@ -7,6 +7,7 @@
 			<my-nav showBackIcon :showMessageCount="false" :title="navTitle" :showRightFirstIcon="false" :rightRightSource="more_menu_icon"
 			 secondFucType="chat" />
 		</view>
+		<!-- 内容区域 -->
 		<scroll-view scroll-y="true" :style="getScrollHeight">
 			<view :style="getScrollHeight" @click="closeKeyBoard">
 				<view class="chat_item">
@@ -14,25 +15,34 @@
 				</view>
 			</view>
 		</scroll-view>
+		<!-- 底部区域 -->
 		<view class="acc_bottom" :style="'bottom:' +keyBoardHeight+'px'">
-			<view class="acc_bottom_sound" @click="handleAudio">
-				<text class="iconfont acc_bottom_sound_icon" v-if="showAudioWord === 1">{{ sound_down }}</text>
-				<text class="iconfont acc_bottom_sound_icon" v-else>{{ sound_icon }}</text>
-			</view>
-			<view class="acc_bottom_input acc_bottom_box" v-if="showAudioWord === 1">
-				<text class="acc_bottom_box_text">按住 说话</text>
-			</view>
-			<input v-else :focus="isShowInitKeyBoard===1" v-model="chatValue" ref="input" type="text" :class="showSendBtn === 2 ? 'acc_bottom_input' : 'acc_bottom_input2'"
-			 @focus="upKeyBoarrd" :adjust-position="false" @input="handleInput" />
-			<view class="acc_bottom_iconBox">
-				<text class="iconfont icon_emoji">{{ emoji_icon }}</text>
-				<text class="iconfont icon_add" v-if="showSendBtn === 2">{{ add_icon }}</text>
-				<!-- <button class="acc_bottom_iconBox_send" v-else type="default">发送</button> -->
-				<view class="button" v-else>
-					<text class="button_text">发送</text>
+			<view class="acc_bottom_chat">
+				<view class="acc_bottom_sound" @click="handleAudio">
+					<text class="iconfont acc_bottom_sound_icon" v-if="showAudioWord === 1">{{ sound_down }}</text>
+					<text class="iconfont acc_bottom_sound_icon" v-else>{{ sound_icon }}</text>
+				</view>
+				<view class="acc_bottom_input acc_bottom_box" v-if="showAudioWord === 1">
+					<text class="acc_bottom_box_text">按住 说话</text>
+				</view>
+				<input v-else :focus="isShowInitKeyBoard===1" v-model="chatValue" ref="input" type="text" :class="showSendBtn === 2 ? 'acc_bottom_input' : 'acc_bottom_input2'"
+				 @focus="upKeyBoarrd" :adjust-position="false" @input="handleInput" />
+				<view class="acc_bottom_iconBox">
+					<text class="iconfont icon_emoji">{{ emoji_icon }}</text>
+					<text class="iconfont icon_add" v-if="showSendBtn === 2" @click="showBottomMenu">{{ add_icon }}</text>
+					<!-- <button class="acc_bottom_iconBox_send" v-else type="default">发送</button> -->
+					<view class="button" v-else>
+						<text class="button_text">发送</text>
+					</view>
 				</view>
 			</view>
+
+
 		</view>
+		<!-- 底部点击+出来的弹窗 -->
+		<my-model ref="popUp2" isBottom isMaskOpacity>
+			<chat-bottom-menu :list="menuList"></chat-bottom-menu>
+		</my-model>
 	</view>
 </template>
 
@@ -43,10 +53,17 @@
 	import myNav from '@/component/myNav/myNav.nvue';
 	import Constant from '@/constant/js/const.js';
 	import chatItemList from "@/pages/chatDetail/chatItemList.nvue";
+	import myModel from '@/component/myModel/myModel.nvue';
+	import chatBottomMenu from '@/pages/chatDetail/chatBottomMenu.nvue';
+	import {
+		chatBottomMenuList
+	} from '@/static/data/chatDetail.js';
 	export default {
 		components: {
 			myNav,
-			chatItemList
+			chatItemList,
+			myModel,
+			chatBottomMenu
 		},
 		data() {
 			return {
@@ -62,6 +79,7 @@
 				showSendBtn: 2, // 是否展示发送按钮
 				showAudioWord: 2, // 是否展示语音文字
 				isShowInitKeyBoard: 2, // 是否自动展示键盘
+				menuList: chatBottomMenuList, // 底部菜单列表
 			};
 		},
 		computed: {
@@ -147,6 +165,13 @@
 						this.isShowInitKeyBoard = 2
 					}
 				}
+			},
+			// 点击+号弹出按钮
+			showBottomMenu() {
+				this.keyBoardHeight = uni.upx2px(626)
+				console.log("222", this.keyBoardHeight)
+				uni.hideKeyboard()
+				this.$refs.popUp2.show()
 			}
 		}
 	}
@@ -248,10 +273,13 @@
 	.acc_bottom {
 		width: $boxWidth;
 		position: fixed;
-		bottom: 0;
-		height: 106rpx;
 		@include borderTop;
-		background-color: $boxBgColor;
+		background-color: #f7f7f7;
+	}
+
+	.acc_bottom_chat {
+		width: $boxWidth;
+		height: 106rpx;
 		@include verticalCenter;
 	}
 

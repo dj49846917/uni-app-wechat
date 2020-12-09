@@ -99,6 +99,34 @@ const homeListMenu = [
 	},
 ]
 
+const realList = [{
+	"id": 1,
+	"chat_type": "user",
+	"avatar": "http://tangzhe123-com.oss-cn-shenzhen.aliyuncs.com/egg-oss-demo/8nchfbfb0zo0000.jpg",
+	"name": "ceshi1",
+	"update_time": 1607482790821,
+	"data": "666",
+	"type": "text",
+	"noreadnum": 0,
+	"istop": false,
+	"shownickname": false,
+	"nowarn": false,
+	"strongwarn": false
+}, {
+	"id": 2,
+	"chat_type": "user",
+	"avatar": "",
+	"name": "ceshi2",
+	"update_time": 1607482079324,
+	"data": "555",
+	"type": "text",
+	"noreadnum": 0,
+	"istop": false,
+	"shownickname": false,
+	"nowarn": false,
+	"strongwarn": false
+}]
+
 export {
 	listData,
 	homeMenuData,

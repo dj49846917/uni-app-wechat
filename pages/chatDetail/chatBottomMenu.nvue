@@ -1,0 +1,85 @@
+<template>
+	<swiper class="menu" indicator-dots>
+		<swiper-item>
+			<view class="menu_list">
+				<template v-for="item in list">
+					<view v-if="item.id < 8" class="menu_list_item1" :key="item.id">
+						<view class="menu_list_item_box">
+							<text class="iconfont menu_list_item_box_icon">{{ item.icon }}</text>
+						</view>
+						<text class="menu_list_item_text">{{ item.text }}</text>
+					</view>
+				</template>
+			</view>
+		</swiper-item>
+		<swiper-item>
+			<view class="menu_list">
+				<template v-for="item in list">
+					<view v-if="item.id >=8" class="menu_list_item1" :key="item.id">
+						<view class="menu_list_item_box">
+							<text class="iconfont menu_list_item_box_icon">{{ item.icon }}</text>
+						</view>
+						<text class="menu_list_item_text">{{ item.text }}</text>
+					</view>
+				</template>
+			</view>
+		</swiper-item>
+	</swiper>
+</template>
+
+<script>
+	export default {
+		props: {
+			list: {
+				type: Array,
+				default: []
+			}
+		},
+		data() {
+			return {
+
+			}
+		}
+	}
+</script>
+
+<style lang="scss" scoped>
+	@import "@/constant/css/constant.scss";
+	.menu {
+		height: 626rpx;
+		background-color: #f7f7f7;
+		@include borderTop;
+	}
+	.menu_list {
+		width: $boxWidth;
+		flex: 1;
+		padding-left: 67rpx;
+		padding-top: 60rpx;
+		flex-direction: row;
+		flex-wrap: wrap;
+	}
+	.menu_list2 {
+		@extend .menu_list;
+		margin-top: 54rpx;
+	}
+	.menu_list_item1 {
+		width: 106rpx;
+		align-items: center;
+		margin-right: 60rpx;
+		margin-top: 60rpx;
+	}
+	.menu_list_item_box {
+		width: 106rpx;
+		height: 105rpx;
+		background-color: #fff;
+		@include center;
+		border-radius: 10rpx;
+	}
+	.menu_list_item_box_icon {
+		font-size: 45rpx;
+	}
+	.menu_list_item_text {
+		font-size: 26rpx;
+		margin-top: 10rpx;
+	}
+</style>
