@@ -8,10 +8,10 @@
 			 secondFucType="chat" />
 		</view>
 		<!-- 内容区域 -->
-		<scroll-view scroll-y="true" :style="getScrollHeight">
-			<view :style="getScrollHeight" @click="closeKeyBoard">
-				<view class="chat_item">
-					<chat-item-list></chat-item-list>
+		<scroll-view scroll-y="true" :style="getScrollStyle" :scroll-into-view="scrollIntoView">
+			<view @click="closeKeyBoard">
+				<view class="chat_item" v-for="(i, index) in 4" :key="index" :id="'chatItem_'+index">
+					<chat-item-list ref="list"></chat-item-list>
 				</view>
 			</view>
 		</scroll-view>
@@ -40,7 +40,7 @@
 
 		</view>
 		<!-- 底部点击+出来的弹窗 -->
-		<my-model ref="popUp2" isBottom isMaskOpacity>
+		<my-model ref="popUp2" isBottom isMaskOpacity :isShowMask="false">
 			<chat-bottom-menu :list="menuList"></chat-bottom-menu>
 		</my-model>
 	</view>
@@ -67,8 +67,8 @@
 		},
 		data() {
 			return {
-				navTitle: "",
-				id: "",
+				navTitle: "", // 从列表页面传递过来的title
+				id: "", // 从列表页面传递过来的id
 				more_menu_icon: Constant.more_icon, // 更多
 				sound_icon: Constant.sound_icon, // 语音
 				sound_down: Constant.audio_down, // 收起语音
@@ -79,7 +79,9 @@
 				showSendBtn: 2, // 是否展示发送按钮
 				showAudioWord: 2, // 是否展示语音文字
 				isShowInitKeyBoard: 2, // 是否自动展示键盘
+				isOpenModel: false, // 是否打开底部按钮的弹窗
 				menuList: chatBottomMenuList, // 底部菜单列表
+				scrollIntoView: "", // Scroll-view滑动到对应的位置的id
 			};
 		},
 		computed: {
@@ -91,24 +93,24 @@
 				getNavBarPosition: (state) => {
 					return `position: fixed; top: ${state.app.tipBarHeight}px`
 				},
-				// 获取滚动区域的高度
-				getScrollHeight: (state) => {
-					const bottomHeight = uni.upx2px(106); // 底部高度
-					const tipBarHeight = state.app.tipBarHeight; // 状态栏高度
-					const navBarHeight = uni.upx2px(90); // 导航栏高度
-					const top = tipBarHeight + navBarHeight
-					// #ifndef MP
-					const scollHeight = state.app.height - tipBarHeight - navBarHeight - bottomHeight
-					return `width: 750rpx; height: ${scollHeight}px; background-color: ${Constant.boxBgColor}; position: fixed; top: ${top}px;`
-					// #endif
+			}),
+			// 获取滚动区域的高度
+			getScrollStyle() {
+				const bottomHeight = uni.upx2px(106); // 底部高度
+				const tipBarHeight = this.$store.state.app.tipBarHeight; // 状态栏高度
+				const navBarHeight = uni.upx2px(90); // 导航栏高度
+				const top = tipBarHeight + navBarHeight
+				// #ifndef MP
+				// const scollHeight = this.$store.state.app.height - tipBarHeight - navBarHeight - bottomHeight - this.keyBoardHeight
+				return `width: 750rpx; background-color: ${Constant.boxBgColor}; position: fixed; top: ${top}px; bottom: ${bottomHeight + this.keyBoardHeight}px;`
+				// #endif
 
-					// #ifdef MP
-					const windowHeight = uni.getSystemInfoSync().windowHeight
-					const scollHeight = windowHeight - tipBarHeight - navBarHeight - bottomHeight
-					return `width: 750rpx; height: ${scollHeight}px; background-color: ${Constant.boxBgColor}; position: fixed; top: ${top}px;`
-					// #endif
-				}
-			})
+				// #ifdef MP
+				const windowHeight = uni.getSystemInfoSync().windowHeight
+				// const scollHeight = windowHeight - tipBarHeight - navBarHeight - bottomHeight - this.keyBoardHeight
+				return `width: 750rpx; background-color: ${Constant.boxBgColor}; position: fixed; top: ${top}px; bottom: ${bottomHeight + this.keyBoardHeight}px; z-index: 9999;`
+				// #endif
+			}
 		},
 		// 获取页面传入的参数
 		onLoad(option) {
@@ -125,6 +127,9 @@
 			uni.onKeyboardHeightChange(res => {
 				this.$store.commit("app/setKeyBoardHeight", res.height)
 				this.keyBoardHeight = res.height
+				if (res.height > 0) {
+					this.pageToBottom()
+				}
 			})
 		},
 		methods: {
@@ -136,6 +141,7 @@
 			closeKeyBoard() {
 				uni.hideKeyboard()
 				this.keyBoardHeight = 0
+				this.$refs.popUp2.hide()
 			},
 			// 输入框输入内容
 			handleInput(e) {
@@ -168,11 +174,30 @@
 			},
 			// 点击+号弹出按钮
 			showBottomMenu() {
-				this.keyBoardHeight = uni.upx2px(626)
-				console.log("222", this.keyBoardHeight)
-				uni.hideKeyboard()
-				this.$refs.popUp2.show()
-			}
+				if (this.isOpenModel) {
+					this.isOpenModel = false
+					this.isShowInitKeyBoard = 1 // 聚焦
+					this.keyBoardHeight = this.$store.state.app.keyBoardHeight
+					this.$refs.popUp2.hide()
+
+				} else {
+					this.isOpenModel = true
+					this.isShowInitKeyBoard = 2
+					this.keyBoardHeight = uni.upx2px(626)
+					uni.hideKeyboard()
+					this.$refs.popUp2.show()
+				}
+				this.$nextTick(function() {
+					this.pageToBottom()
+				})
+			},
+			// 回到底部
+			pageToBottom() {
+				this.$nextTick(function() {
+					let lastIndex = 3
+					this.scrollIntoView = 'chatItem_' + lastIndex
+				})
+			},
 		}
 	}
 </script>
