@@ -142,6 +142,7 @@
 			closeKeyBoard() {
 				uni.hideKeyboard()
 				this.keyBoardHeight = 0
+				this.isOpenModel = false
 				this.$refs.popUp2.hide()
 			},
 			// 输入框输入内容
