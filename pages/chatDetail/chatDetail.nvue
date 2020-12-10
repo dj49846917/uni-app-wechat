@@ -125,9 +125,9 @@
 		mounted() {
 			// 监听键盘高度变化
 			uni.onKeyboardHeightChange(res => {
-				this.$store.commit("app/setKeyBoardHeight", res.height)
-				this.keyBoardHeight = res.height
 				if (res.height > 0) {
+					this.$store.commit("app/setKeyBoardHeight", res.height)
+					this.keyBoardHeight = res.height
 					this.pageToBottom()
 				}
 			})
@@ -136,6 +136,7 @@
 			// 输入框获取焦点
 			upKeyBoarrd() {
 				this.keyBoardHeight = this.$store.state.app.keyBoardHeight
+				this.isShowInitKeyBoard = 1
 			},
 			// 点击scroll-view区域清除键盘高度
 			closeKeyBoard() {
