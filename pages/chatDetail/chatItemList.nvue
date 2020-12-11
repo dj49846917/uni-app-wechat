@@ -1,39 +1,59 @@
 <template>
 	<view>
 		<view class="chat_item_time">
-			<text class="chat_item_time_text">上午9:45</text>
+			<text class="chat_item_time_text">{{ data.create_time | formatTime }}</text>
 		</view>
-		<view class="chat_item_other">
-			<image :src="otherImg" class="chat_item_other_icon" />
-			<view class="chat_item_other_box">
-				<text class="iconfont chat_item_other_box_icon">{{ left_icon }}</text>
-				<view class="chat_item_other_box_content">
-					<text class="chat_item_other_box_content_text">我11111的我11111的我11111的我11111的我11111的我11111的</text>
-				</view>
-			</view>
-		</view>
-		<view class="chat_item_my">
+		<!-- 我 -->
+		<view v-if="isMe" class="chat_item_my">
 			<view class="chat_item_my_box">
 				<text class="iconfont chat_item_my_box_icon">{{ right_icon }}</text>
 				<view class="chat_item_other_box_content">
-					<text class="chat_item_other_box_content_text">我的11111我的11111我的11111我的11111我的11111我的11111我的11111</text>
+					<text class="chat_item_other_box_content_text">{{ data.data }}</text>
 				</view>
 			</view>
-			<image :src="myImg" class="chat_item_my_icon" />
+			<image :src="data.from_avatar" class="chat_item_my_icon" />
+		</view>
+		<!-- 好友 -->
+		<view v-else class="chat_item_other">
+			<image :src="data.from_avatar" class="chat_item_other_icon" />
+			<view class="chat_item_other_box">
+				<text class="iconfont chat_item_other_box_icon">{{ left_icon }}</text>
+				<view class="chat_item_other_box_content">
+					<text class="chat_item_other_box_content_text">{{ data.data }}</text>
+				</view>
+			</view>
 		</view>
 	</view>
 </template>
 
 <script>
 	import Constant from '@/constant/js/const.js';
+	import { parseTime } from '@/utils/utils.js';
 	export default {
+		props: {
+			data: {
+				type: Object,
+				default: {}
+			}
+		},
 		data() {
 			return {
 				otherImg: "/static/images/user_other.jpg",			// 别人
 				myImg: "/static/images/userpic.jpg",				// 自己
 				left_icon: Constant.left_sound,						// 左三角
 				right_icon: Constant.right_sound,					// 右三角
+				user_id: 6,   										// 当前登录人的id
 			};
+		},
+		filters: {
+			formatTime(val) {
+				return parseTime(val)
+			}
+		},
+		computed: {
+			isMe() {
+				return this.user_id === this.data.from_id
+			}
 		}
 	}
 </script>

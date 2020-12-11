@@ -10,8 +10,8 @@
 		<!-- 内容区域 -->
 		<scroll-view scroll-y="true" :style="getScrollStyle" :scroll-into-view="scrollIntoView">
 			<view @click="closeKeyBoard">
-				<view class="chat_item" v-for="(i, index) in 4" :key="index" :id="'chatItem_'+index">
-					<chat-item-list ref="list"></chat-item-list>
+				<view class="chat_item" v-for="(item, index) in chatList" :key="index" :id="'chatItem_'+index">
+					<chat-item-list ref="list" :data="item"></chat-item-list>
 				</view>
 			</view>
 		</scroll-view>
@@ -56,7 +56,8 @@
 	import myModel from '@/component/myModel/myModel.nvue';
 	import chatBottomMenu from '@/pages/chatDetail/chatBottomMenu.nvue';
 	import {
-		chatBottomMenuList
+		chatBottomMenuList,
+		chatList
 	} from '@/static/data/chatDetail.js';
 	export default {
 		components: {
@@ -82,6 +83,7 @@
 				isOpenModel: false, // 是否打开底部按钮的弹窗
 				menuList: chatBottomMenuList, // 底部菜单列表
 				scrollIntoView: "", // Scroll-view滑动到对应的位置的id
+				chatList: [],  // 聊天列表
 			};
 		},
 		computed: {
@@ -121,6 +123,8 @@
 			if (this.chatValue) {
 				this.isShowInitKeyBoard = 1
 			}
+			// 获取数据
+			this.chatList = chatList
 		},
 		mounted() {
 			// 监听键盘高度变化
@@ -137,6 +141,8 @@
 			upKeyBoarrd() {
 				this.keyBoardHeight = this.$store.state.app.keyBoardHeight
 				this.isShowInitKeyBoard = 1
+				this.isOpenModel = false
+				this.$refs.popUp2.hide()
 			},
 			// 点击scroll-view区域清除键盘高度
 			closeKeyBoard() {
