@@ -11,7 +11,7 @@
 		<scroll-view scroll-y="true" :style="getScrollStyle" :scroll-into-view="scrollIntoView">
 			<view @click="closeKeyBoard">
 				<view class="chat_item" v-for="(item, index) in chatList" :key="index" :id="'chatItem_'+index">
-					<chat-item-list ref="list" :data="item"></chat-item-list>
+					<chat-item-list ref="list" :data="item" :lastTime="index > 0 ? chatList[index - 1].create_time : 0"></chat-item-list>
 				</view>
 			</view>
 		</scroll-view>
@@ -31,7 +31,7 @@
 					<text class="iconfont icon_emoji">{{ emoji_icon }}</text>
 					<text class="iconfont icon_add" v-if="showSendBtn === 2" @click="showBottomMenu">{{ add_icon }}</text>
 					<!-- <button class="acc_bottom_iconBox_send" v-else type="default">发送</button> -->
-					<view class="button" v-else>
+					<view v-else class="button" @click="sendMsg">
 						<text class="button_text">发送</text>
 					</view>
 				</view>
@@ -206,6 +206,28 @@
 					this.scrollIntoView = 'chatItem_' + lastIndex
 				})
 			},
+			// 发送消息
+			sendMsg() {
+				const params = {
+					id: Math.random(),
+					from_avatar: "/static/images/userpic.jpg",
+					from_name: "杜江",
+					from_id: 6,
+					to_id: 2,
+					to_name: "妈",
+					to_avatar: "/static/images/user_other.jpg",
+					chat_type: "user",
+					type: "text",
+					data: this.chatValue,
+					options: {},
+					create_time: new Date().valueOf(),
+					isremove: 0,
+					sendStatus: "success",
+					k: "k0"
+				}
+				this.chatList.push(params)
+				this.chatValue = ""
+			}
 		}
 	}
 </script>

@@ -66,3 +66,14 @@ export function parseTime(val) {
 		}
 	}
 }
+
+// 比较两个时间，如果时间小于5分钟，则不展示
+export function compareTime(v1, v2) {
+	v1=v1.toString().length<13 ? v1*1000 : v1;
+	v2=v2.toString().length<13 ? v2*1000 : v2;
+	if(((parseInt(v1)-parseInt(v2))/1000) > 300){
+		return parseTime(v1);
+	} else {
+		return false
+	}
+}

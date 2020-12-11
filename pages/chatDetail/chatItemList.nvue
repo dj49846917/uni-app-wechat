@@ -1,7 +1,7 @@
 <template>
 	<view>
-		<view class="chat_item_time">
-			<text class="chat_item_time_text">{{ data.create_time | formatTime }}</text>
+		<view class="chat_item_time" v-if="getTime">
+			<text class="chat_item_time_text">{{ getTime }}</text>
 		</view>
 		<!-- 我 -->
 		<view v-if="isMe" class="chat_item_my">
@@ -28,12 +28,16 @@
 
 <script>
 	import Constant from '@/constant/js/const.js';
-	import { parseTime } from '@/utils/utils.js';
+	import { parseTime, compareTime } from '@/utils/utils.js';
 	export default {
 		props: {
 			data: {
 				type: Object,
 				default: {}
+			},
+			lastTime: {
+				type: Number,
+				default: 0
 			}
 		},
 		data() {
@@ -47,12 +51,18 @@
 		},
 		filters: {
 			formatTime(val) {
+				console.log('this', this)
 				return parseTime(val)
 			}
 		},
 		computed: {
+			// 判断是否是自己
 			isMe() {
 				return this.user_id === this.data.from_id
+			},
+			// 过滤时间(如果在5分钟内发送的信息，则不展示时间)
+			getTime () {
+				return compareTime(this.data.create_time, this.lastTime)
 			}
 		}
 	}
