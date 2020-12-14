@@ -8,7 +8,16 @@
 			<view class="chat_item_my_box">
 				<text class="iconfont chat_item_my_box_icon">{{ right_icon }}</text>
 				<view class="chat_item_other_box_content">
-					<text class="chat_item_other_box_content_text">{{ data.data }}</text>
+					<!-- 文本 -->
+					<text v-if="data.type==='text'" class="chat_item_other_box_content_text">{{ data.data }}</text>
+					<!-- 图片 -->
+					<image 
+						v-else-if="data.type==='image'" 
+						:src="data.data" 
+						:style="chatImg" 
+						class="chat_item_other_box_content_img" 
+						@load="loadImg"
+					/>
 				</view>
 			</view>
 			<image :src="data.from_avatar" class="chat_item_my_icon" />
@@ -19,7 +28,16 @@
 			<view class="chat_item_other_box">
 				<text class="iconfont chat_item_other_box_icon">{{ left_icon }}</text>
 				<view class="chat_item_other_box_content">
-					<text class="chat_item_other_box_content_text">{{ data.data }}</text>
+					<!-- 文本 -->
+					<text v-if="data.type==='text'" class="chat_item_other_box_content_text">{{ data.data }}</text>
+					<!-- 图片 -->
+					<image 
+						v-else-if="data.type==='image'" 
+						:src="data.data" 
+						:style="chatImg" 
+						class="chat_item_other_box_content_img" 
+						@load="loadImg"
+					/>
 				</view>
 			</view>
 		</view>
@@ -47,6 +65,8 @@
 				left_icon: Constant.left_sound,						// 左三角
 				right_icon: Constant.right_sound,					// 右三角
 				user_id: 6,   										// 当前登录人的id
+				h: 360,
+				w: 510
 			};
 		},
 		filters: {
@@ -63,6 +83,37 @@
 			// 过滤时间(如果在5分钟内发送的信息，则不展示时间)
 			getTime () {
 				return compareTime(this.data.create_time, this.lastTime)
+			},
+			// 对图片做自适应，高度最大不高于360，宽度最大不大于510
+			chatImg() {
+				return `width: ${this.w}px; height: ${this.h}px;`
+			}
+		},
+		methods: {
+			// 动态根据图片原始宽高比计算图片的缩放宽高
+			loadImg(e) {
+				// 原图的宽高比
+				const compares = e.detail.width / e.detail.height
+				const maxHeight = uni.upx2px(360)
+				const maxWidth = uni.upx2px(510)
+				if(e.detail.height > maxHeight) {
+					if(maxHeight * compares > maxWidth) {
+						this.w = maxWidth
+						this.h = this.w / compares
+					} else {
+						this.h = maxHeight
+						this.w = compares * maxHeight
+					}
+				} else {
+					// 原始高度<=360并且宽度大于510
+					if(e.detail.width > maxWidth) {
+						this.w = maxWidth
+						this.h = maxWidth / compares
+					} else {
+						this.h = e.detail.height
+						this.w = e.detail.width
+					}
+				}
 			}
 		}
 	}
@@ -128,11 +179,16 @@
 	.chat_item_other_box_content {
 		max-width: 510rpx;
 		border-radius: 8rpx;
-		padding: 19rpx;
 		background-color: #fff;
 	}
 	.chat_item_other_box_content_text {
 		font-size: 32rpx;
 		color: $listTitleColor;
+		padding: 19rpx;
+	}
+	// 设置默认的高度
+	.chat_item_other_box_content_img {
+		height: 360rpx;
+		width: 510rpx;
 	}
 </style>

@@ -3,7 +3,7 @@
 		<swiper-item>
 			<view class="menu_list">
 				<template v-for="item in list">
-					<view v-if="item.id < 8" class="menu_list_item1" :key="item.id">
+					<view v-if="item.id < 8" class="menu_list_item1" :key="item.id" @click="handleChange(item)">
 						<view class="menu_list_item_box">
 							<text class="iconfont menu_list_item_box_icon">{{ item.icon }}</text>
 						</view>
@@ -39,17 +39,142 @@
 			return {
 
 			}
+		},
+		methods: {
+			// 分发事件
+			handleChange(item) {
+				console.log("item", item)
+				switch (item.text) {
+					case "相册":
+						uni.chooseImage({
+							sourceType: ['album'], //从相册选择
+							success: (res) => {
+								console.log("res", res)
+								res.tempFilePaths.forEach(it => {
+									const params = {
+										id: Math.random(),
+										from_avatar: "/static/images/userpic.jpg",
+										from_name: "杜江",
+										from_id: 6,
+										to_id: 2,
+										to_name: "妈",
+										to_avatar: "/static/images/user_other.jpg",
+										chat_type: "user",
+										type: "image",
+										data: it,
+										options: {},
+										create_time: new Date().valueOf(),
+										isremove: 0,
+										sendStatus: "success",
+										k: "k0"
+									}
+									this.$store.dispatch("chatDetail/sendImg", params)
+									this.$emit("scrollToBottom")
+								})
+							}
+						})
+						break;
+					case "拍摄":
+						uni.chooseImage({
+							sourceType: ["camera"],
+							success: (res) => {
+								console.log("res.tempFilePaths", res.tempFilePaths)
+								const params = {
+									id: Math.random(),
+									from_avatar: "/static/images/userpic.jpg",
+									from_name: "杜江",
+									from_id: 6,
+									to_id: 2,
+									to_name: "妈",
+									to_avatar: "/static/images/user_other.jpg",
+									chat_type: "user",
+									type: "image",
+									data: res.tempFilePaths[0],
+									options: {},
+									create_time: new Date().valueOf(),
+									isremove: 0,
+									sendStatus: "success",
+									k: "k0"
+								}
+								this.$store.dispatch("chatDetail/sendImg", params)
+								this.$emit("scrollToBottom")
+							},
+							fail: (error) => {
+								uni.showToast({
+									title: error,
+									duration: 2000
+								})
+							}
+						})
+						break;
+					case "视频通话":
+						uni.showToast({
+							title: "敬请期待",
+							duration: 1000
+						})
+						break;
+					case "位置":
+					uni.chooseLocation({
+						success: (res) => {
+							console.log("res", res)
+						}
+					})
+						// uni.showToast({
+						// 	title: "敬请期待",
+						// 	duration: 1000
+						// })
+						// break;
+					case "红包":
+						uni.showToast({
+							title: "敬请期待",
+							duration: 1000
+						})
+						break;
+					case "转账":
+						uni.showToast({
+							title: "敬请期待",
+							duration: 1000
+						})
+						break;
+					case "语音输入":
+						uni.showToast({
+							title: "敬请期待",
+							duration: 1000
+						})
+						break;
+					case "我的收藏":
+						uni.showToast({
+							title: "敬请期待",
+							duration: 1000
+						})
+						break;
+					case "名片":
+						uni.showToast({
+							title: "敬请期待",
+							duration: 1000
+						})
+						break;
+					default:
+						uni.showToast({
+							title: "敬请期待",
+							duration: 1000
+						})
+						break;
+				}
+			}
 		}
 	}
 </script>
 
 <style lang="scss" scoped>
 	@import "@/constant/css/constant.scss";
+
 	.menu {
 		height: 626rpx;
 		background-color: #f7f7f7;
 		@include borderTop;
 	}
+
 	.menu_list {
 		width: $boxWidth;
 		flex: 1;
@@ -58,16 +183,19 @@
 		flex-direction: row;
 		flex-wrap: wrap;
 	}
+
 	.menu_list2 {
 		@extend .menu_list;
 		margin-top: 54rpx;
 	}
+
 	.menu_list_item1 {
 		width: 106rpx;
 		align-items: center;
 		margin-right: 60rpx;
 		margin-top: 60rpx;
 	}
+
 	.menu_list_item_box {
 		width: 106rpx;
 		height: 105rpx;
@@ -75,9 +203,11 @@
 		@include center;
 		border-radius: 10rpx;
 	}
+
 	.menu_list_item_box_icon {
 		font-size: 45rpx;
 	}
+
 	.menu_list_item_text {
 		font-size: 26rpx;
 		margin-top: 10rpx;
