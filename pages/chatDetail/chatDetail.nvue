@@ -41,7 +41,7 @@
 		</view>
 		<!-- 底部点击+出来的弹窗 -->
 		<my-model ref="popUp2" isBottom isMaskOpacity :isShowMask="false">
-			<chat-bottom-menu :list="menuList" @scrollToBottom="pageToBottom"></chat-bottom-menu>
+			<chat-bottom-menu :list="menuList" @scrollToBottom="handleClick"></chat-bottom-menu>
 		</my-model>
 	</view>
 </template>
@@ -205,11 +205,13 @@
 			},
 			// 回到底部
 			pageToBottom() {
-				this.$nextTick(function() {
+				setTimeout(()=>{
 					let lastIndex = this.$store.state.chatDetail.chatList.length - 1
-					console.log("let lastIndex", lastIndex)
 					this.scrollIntoView = 'chatItem_' + lastIndex
-				})
+				}, 300)
+				// this.$nextTick(function() {
+					
+				// })
 			},
 			// 发送消息
 			sendMsg() {
@@ -232,6 +234,13 @@
 				}
 				this.$store.dispatch("chatDetail/addMessage", params)
 				this.chatValue = ""
+				this.pageToBottom()
+				this.isShowInitKeyBoard = 2
+				this.showSendBtn = 2
+			},
+			// 点击底部菜单的回调
+			handleClick() {
+				this.pageToBottom()
 			}
 		}
 	}
