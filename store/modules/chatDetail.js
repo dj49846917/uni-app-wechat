@@ -30,6 +30,10 @@ const chatDetail = {
 		sendImg({commit}, payload) {
 			commit("pushList", payload)
 		},
+		// 发送地图
+		sendMap({commit}, payload) {
+			commit("pushList", payload)
+		},
 	}
 }
 

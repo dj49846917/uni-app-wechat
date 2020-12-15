@@ -114,11 +114,32 @@
 						})
 						break;
 					case "位置":
-					uni.chooseLocation({
-						success: (res) => {
-							console.log("res", res)
-						}
-					})
+						uni.chooseLocation({
+							success: (res) => {
+								console.log("res222", res)
+								const params = {
+									id: Math.random(),
+									from_avatar: "/static/images/userpic.jpg",
+									from_name: "杜江",
+									from_id: 6,
+									to_id: 2,
+									to_name: "妈",
+									to_avatar: "/static/images/user_other.jpg",
+									chat_type: "user",
+									type: "map",
+									data: res,
+									options: {
+										covers: [res]
+									},
+									create_time: new Date().valueOf(),
+									isremove: 0,
+									sendStatus: "success",
+									k: "k0"
+								}
+								this.$store.dispatch("chatDetail/sendMap", params)
+								this.$emit("scrollToBottom")
+							}
+						})
 						// uni.showToast({
 						// 	title: "敬请期待",
 						// 	duration: 1000

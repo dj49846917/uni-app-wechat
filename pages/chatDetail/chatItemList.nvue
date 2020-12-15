@@ -11,13 +11,18 @@
 					<!-- 文本 -->
 					<text v-if="data.type==='text'" class="chat_item_other_box_content_text">{{ data.data }}</text>
 					<!-- 图片 -->
-					<image 
-						v-else-if="data.type==='image'" 
-						:src="data.data" 
-						:style="chatImg" 
-						class="chat_item_other_box_content_img" 
-						@load="loadImg"
-					/>
+					<image v-else-if="data.type==='image'" :src="data.data" :style="chatImg" class="chat_item_other_box_content_img"
+					 @load="loadImg" />
+					 <!-- 地图 -->
+					<view class="chat_map_box" v-else-if="data.type === 'map'">
+						<view class="chat_map_text">
+							<text class="chat_map_text_loc">{{ data.data.name }}</text>
+							<text class="chat_map_text_location">{{ data.data.address }}</text>
+						</view>
+						<map class="chat_map" :latitude="data.data.latitude" :longitude="data.data.longitude" :markers="data.options.covers">
+							<cover-view class="chat_map2"></cover-view>
+						</map>
+					</view>
 				</view>
 			</view>
 			<image :src="data.from_avatar" class="chat_item_my_icon" />
@@ -31,13 +36,18 @@
 					<!-- 文本 -->
 					<text v-if="data.type==='text'" class="chat_item_other_box_content_text">{{ data.data }}</text>
 					<!-- 图片 -->
-					<image 
-						v-else-if="data.type==='image'" 
-						:src="data.data" 
-						:style="chatImg" 
-						class="chat_item_other_box_content_img" 
-						@load="loadImg"
-					/>
+					<image v-else-if="data.type==='image'" :src="data.data" :style="chatImg" class="chat_item_other_box_content_img"
+					 @load="loadImg" />
+					 <!-- 地图 -->
+					<view class="chat_map_box" v-else-if="data.type === 'map'">
+						<view class="chat_map_text">
+							<text class="chat_map_text_loc">{{ data.data.name }}</text>
+							<text class="chat_map_text_location">{{ data.data.address }}</text>
+						</view>
+						<map class="chat_map" :latitude="data.data.latitude" :longitude="data.data.longitude" :markers="data.options.covers">
+							<cover-view class="chat_map2"></cover-view>
+						</map>
+					</view>
 				</view>
 			</view>
 		</view>
@@ -46,7 +56,10 @@
 
 <script>
 	import Constant from '@/constant/js/const.js';
-	import { parseTime, compareTime } from '@/utils/utils.js';
+	import {
+		parseTime,
+		compareTime
+	} from '@/utils/utils.js';
 	export default {
 		props: {
 			data: {
@@ -60,13 +73,17 @@
 		},
 		data() {
 			return {
-				otherImg: "/static/images/user_other.jpg",			// 别人
-				myImg: "/static/images/userpic.jpg",				// 自己
-				left_icon: Constant.left_sound,						// 左三角
-				right_icon: Constant.right_sound,					// 右三角
-				user_id: 6,   										// 当前登录人的id
+				otherImg: "/static/images/user_other.jpg", // 别人
+				myImg: "/static/images/userpic.jpg", // 自己
+				left_icon: Constant.left_sound, // 左三角
+				right_icon: Constant.right_sound, // 右三角
+				user_id: 6, // 当前登录人的id
 				h: 360,
-				w: 510
+				w: 510,
+				// covers: [{
+				// 	latitude: 29.716692,
+				// 	longitude: 106.632708
+				// }]
 			};
 		},
 		filters: {
@@ -81,7 +98,7 @@
 				return this.user_id === this.data.from_id
 			},
 			// 过滤时间(如果在5分钟内发送的信息，则不展示时间)
-			getTime () {
+			getTime() {
 				return compareTime(this.data.create_time, this.lastTime)
 			},
 			// 对图片做自适应，高度最大不高于360，宽度最大不大于510
@@ -96,8 +113,8 @@
 				const compares = e.detail.width / e.detail.height
 				const maxHeight = uni.upx2px(360)
 				const maxWidth = uni.upx2px(510)
-				if(e.detail.height > maxHeight) {
-					if(maxHeight * compares > maxWidth) {
+				if (e.detail.height > maxHeight) {
+					if (maxHeight * compares > maxWidth) {
 						this.w = maxWidth
 						this.h = this.w / compares
 					} else {
@@ -106,7 +123,7 @@
 					}
 				} else {
 					// 原始高度<=360并且宽度大于510
-					if(e.detail.width > maxWidth) {
+					if (e.detail.width > maxWidth) {
 						this.w = maxWidth
 						this.h = maxWidth / compares
 					} else {
@@ -120,75 +137,123 @@
 </script>
 
 <style lang="scss">
-@import "@/constant/css/constant.scss";
-.chat_item_time {
+	@import "@/constant/css/constant.scss";
+
+	.chat_item_time {
 		height: 98rpx;
 		width: $boxWidth;
 		@include center;
 	}
+
 	.chat_item_time_text {
 		font-size: 24rpx;
 		color: $listTextColor;
 	}
+
 	.chat_item_other {
 		flex-direction: row;
 		align-items: flex-start;
 		margin-bottom: 19rpx;
 	}
+
 	.chat_item_my {
 		flex-direction: row;
 		align-items: flex-start;
 		justify-content: flex-end;
 		margin-bottom: 19rpx;
 	}
+
 	.chat_item_other_icon {
 		width: 76rpx;
 		height: 76rpx;
 		border-radius: 8rpx;
 		margin-left: 22rpx;
 	}
+
 	.chat_item_my_icon {
 		@extend .chat_item_other_icon;
 		margin-left: 0;
 		margin-right: 22rpx;
 	}
+
 	.chat_item_other_box {
 		padding-left: 22rpx;
 		position: relative;
 	}
+
 	.chat_item_my_box {
 		padding-right: 22rpx;
 		position: relative;
 	}
+
 	.chat_item_my_box {
 		padding-left: 22rpx;
 		position: relative;
 	}
+
 	.chat_item_other_box_icon {
 		position: absolute;
 		top: 20rpx;
 		left: 0rpx;
 		color: #fff;
 	}
+
 	.chat_item_my_box_icon {
 		position: absolute;
 		top: 20rpx;
 		right: 0rpx;
 		color: #fff;
 	}
+
 	.chat_item_other_box_content {
 		max-width: 510rpx;
 		border-radius: 8rpx;
 		background-color: #fff;
 	}
+
 	.chat_item_other_box_content_text {
 		font-size: 32rpx;
 		color: $listTitleColor;
 		padding: 19rpx;
 	}
+
 	// 设置默认的高度
 	.chat_item_other_box_content_img {
 		height: 360rpx;
 		width: 510rpx;
+	}
+
+	.chat_map_box {
+		width: 440rpx;
+		height: 280rpx;
+		border-radius: 8rpx;
+	}
+
+	.chat_map_text {
+		width: 440rpx;
+		height: 106rpx;
+		padding: 20rpx;
+	}
+
+	.chat_map_text_loc {
+		@include wordBreak;
+		font-size: 28rpx;
+		margin-bottom: 5rpx;
+	}
+
+	.chat_map_text_location {
+		font-size: 24rpx;
+		@include wordBreak;
+	}
+
+	.chat_map {
+		width: 440rpx;
+		height: 174rpx;
+	}
+
+	,
+	.chat_map2 {
+		opacity: 0;
+		@extend .chat_map;
 	}
 </style>
