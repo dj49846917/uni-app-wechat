@@ -1,0 +1,75 @@
+<template>
+	<view class="model" v-if="isVisible">
+		<!-- 蒙版 -->
+		<view class="model_cover" @click="hide"></view>
+		<!-- 主要内容 -->
+		<image :src="now" mode="" class="model_content_icon"></image>
+	</view>
+</template>
+
+<script>
+	export default {
+		data() {
+			return {
+				isVisible: false,
+				count: 1,
+				timer: null,
+				pic: ["/static/images/audio1.png", "/static/images/audio2.png", "/static/images/audio3.png"],
+				i: 0,
+				now: "/static/images/audio1.png",
+				timer: null
+			}
+		},
+		mounted: function() {
+			this.now = this.pic[0];
+			let _this = this;
+			clearInterval(this.timer)
+			this.timer = setInterval(function() {
+				_this.i++;
+				_this.now = _this.pic[_this.i];
+				if (_this.i >= _this.pic.length - 1) {
+					_this.i = -1;
+				}
+				console.log("_this.now", _this.now)
+			}, 600)
+		},
+		beforeDestroy() {
+			clearInterval(this.timer);
+			this.timer = null;
+		},
+		methods: {
+			show() {
+				this.isVisible = true
+			},
+			hide() {
+				this.isVisible = false
+			},
+			// audioActiveIcon() {
+			// 	const arr = ["/static/images/audio1.png", "/static/images/audio2.png", "/static/images/audio3.png"]
+
+			// }
+		}
+	}
+</script>
+
+<style lang="scss" scoped>
+	@import "@/constant/css/constant.scss";
+
+	.model {
+		z-index: 9999;
+	}
+
+	.model_cover {
+		width: 750rpx;
+		@include fixed;
+		background-color: rgba(0, 0, 0, 0.5);
+	}
+
+	.model_content_icon {
+		width: 360rpx;
+		height: 360rpx;
+		position: fixed;
+		top: 480rpx;
+		left: 195rpx;
+	}
+</style>

@@ -123,7 +123,7 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	@import "@/constant/css/constant.scss";
 	$listHeight : 135rpx;
 

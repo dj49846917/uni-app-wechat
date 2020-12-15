@@ -176,6 +176,7 @@
 						})
 						break;
 					default:
+					// 发送文件
 						uni.showToast({
 							title: "敬请期待",
 							duration: 1000

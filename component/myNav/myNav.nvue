@@ -139,7 +139,7 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	@import "@/constant/css/constant.scss";
 	$menuItemHeight: 105rpx;
 

@@ -136,7 +136,7 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	@import "@/constant/css/constant.scss";
 
 	.chat_item_time {
