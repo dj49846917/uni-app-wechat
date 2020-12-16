@@ -23,6 +23,11 @@
 							<cover-view class="chat_map2"></cover-view>
 						</map>
 					</view>
+					<!-- 音频 -->
+					<view class="chat_audio" v-else-if="data.type==='audio'" @click="playAudio(data)">
+						<text class="chat_audio_time" style="margin-right: 5rpx;">{{ data.options.duration | parseAudioTime }}</text>
+						<image :src="now" class="chat_audio_sound" />
+					</view>
 				</view>
 			</view>
 			<image :src="data.from_avatar" class="chat_item_my_icon" />
@@ -47,6 +52,11 @@
 						<map class="chat_map" :latitude="data.data.latitude" :longitude="data.data.longitude" :markers="data.options.covers">
 							<cover-view class="chat_map2"></cover-view>
 						</map>
+					</view>
+					<!-- 音频 -->
+					<view class="chat_audio" v-else-if="data.type==='audio'" @click="playAudio(data)">
+						<image :src="now" class="chat_audio_sound" style="margin-right: 5rpx;" />
+						<text class="chat_audio_time">{{ data.options.duration | parseAudioTime }}</text>
 					</view>
 				</view>
 			</view>
@@ -80,6 +90,7 @@
 				user_id: 6, // 当前登录人的id
 				h: 360,
 				w: 510,
+				now: "/static/images/audio3.png",
 				// covers: [{
 				// 	latitude: 29.716692,
 				// 	longitude: 106.632708
@@ -90,6 +101,9 @@
 			formatTime(val) {
 				console.log('this', this)
 				return parseTime(val)
+			},
+			parseAudioTime(val) {
+				return `${Math.ceil(val / 1000)}"`
 			}
 		},
 		computed: {
@@ -131,6 +145,19 @@
 						this.w = e.detail.width
 					}
 				}
+			},
+			// 点击播放音频
+			playAudio(item) {
+				console.log('222')
+				const innerAudioContext = uni.createInnerAudioContext();
+				innerAudioContext.autoplay = true;
+				innerAudioContext.src = item.data.tempFilePath;
+				innerAudioContext.onPlay(() => {
+				  console.log('开始播放');
+				});
+				innerAudioContext.onError((res) => {
+				  console.log(res);
+				});
 			}
 		}
 	}
@@ -250,10 +277,25 @@
 		width: 440rpx;
 		height: 174rpx;
 	}
-
-	,
+	
 	.chat_map2 {
 		opacity: 0;
 		@extend .chat_map;
+	}
+	.chat_audio {
+		width: 180rpx;
+		height: 76rpx;
+		border-radius: 8rpx;
+		@include verticalCenter;
+		justify-content: flex-end;
+		padding-right: 20rpx;
+	}
+	.chat_audio_time {
+		font-size: 28rpx;
+		color: $listTitleColor;
+	}
+	.chat_audio_sound {
+		width: 50rpx;
+		height: 50rpx;
 	}
 </style>

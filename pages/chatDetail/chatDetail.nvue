@@ -84,8 +84,10 @@
 				isOpenModel: false, // 是否打开底部按钮的弹窗
 				menuList: chatBottomMenuList, // 底部菜单列表
 				scrollIntoView: "", // Scroll-view滑动到对应的位置的id
-				showAudioModel: false,  // 是否展示音频弹窗
-				// chatList: [],  // 聊天列表
+				showAudioModel: false, // 是否展示音频弹窗
+				pressStartTime: 0, // 按下的时间
+				pressEndTime: 0, // 松开的时间
+				audioObj: null, // 录音的对象
 			};
 		},
 		computed: {
@@ -141,6 +143,7 @@
 					this.keyBoardHeight = res.height
 				}
 			})
+			// 滚动到最底部
 			this.pageToBottom()
 		},
 		methods: {
@@ -187,26 +190,93 @@
 					}
 				}
 			},
-			
+
 			// touchstart语音
 			audioStart() {
 				console.log('11')
 				this.showAudioModel = true
-				this.$nextTick(()=>{
+				this.pressStartTime = 0
+				this.pressStartTime = new Date().valueOf()
+				this.$nextTick(() => {
 					this.$refs.audio.show()
 				})
+				// #ifndef H5
+				this.audioObj = uni.getRecorderManager();
+				this.audioObj.start();
+				// #endif
 			},
-			
+
 			// touchend语音
 			audioEnd() {
-				console.log('2')
+				// #ifndef H5
+				console.log("this.audioObj", this.audioObj)
+				// 关闭录音
+				this.audioObj.stop()
+				this.audioObj.onStop((res) => {
+					// #ifdef MP
+					const params = {
+						id: Math.random(),
+						from_avatar: "/static/images/userpic.jpg",
+						from_name: "杜江",
+						from_id: 6,
+						to_id: 2,
+						to_name: "妈",
+						to_avatar: "/static/images/user_other.jpg",
+						chat_type: "user",
+						type: "audio",
+						data: res,
+						options: {
+							...res,
+							duration: res.duration
+						},
+						create_time: new Date().valueOf(),
+						isremove: 0,
+						sendStatus: "success",
+						k: "k0"
+					}
+					this.$store.dispatch("chatDetail/addMessage", params)
+					this.pageToBottom()
+					// #endif
+
+					// #ifdef APP-PLUS-NVUE
+					// 获取音频的时长
+					this.pressEndTime = new Date().valueOf()
+					const duration = this.pressEndTime - this.pressStartTime - 60
+					const params = {
+						id: Math.random(),
+						from_avatar: "/static/images/userpic.jpg",
+						from_name: "杜江",
+						from_id: 6,
+						to_id: 2,
+						to_name: "妈",
+						to_avatar: "/static/images/user_other.jpg",
+						chat_type: "user",
+						type: "audio",
+						data: res,
+						options: {
+							...res,
+							duration
+						},
+						create_time: new Date().valueOf(),
+						isremove: 0,
+						sendStatus: "success",
+						k: "k0"
+					}
+					console.log('params', params)
+					this.$store.dispatch("chatDetail/addMessage", params)
+					this.pageToBottom()
+					// #endif
+				})
+				// #endif
 				this.$refs.audio.hide()
-				this.$nextTick(()=>{
+				this.pressEndTime = 0
+
+				this.$nextTick(() => {
 					this.showAudioModel = false
 				})
-				
+				this.audioObj = null
 			},
-			
+
 			// 点击+号弹出按钮
 			showBottomMenu() {
 				if (this.isOpenModel) {
@@ -228,12 +298,12 @@
 			},
 			// 回到底部
 			pageToBottom() {
-				setTimeout(()=>{
+				setTimeout(() => {
 					let lastIndex = this.$store.state.chatDetail.chatList.length - 1
 					this.scrollIntoView = 'chatItem_' + lastIndex
 				}, 300)
 				// this.$nextTick(function() {
-					
+
 				// })
 			},
 			// 发送消息

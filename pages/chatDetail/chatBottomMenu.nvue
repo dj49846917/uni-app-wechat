@@ -68,7 +68,7 @@
 										sendStatus: "success",
 										k: "k0"
 									}
-									this.$store.dispatch("chatDetail/sendImg", params)
+									this.$store.dispatch("chatDetail/addMessage", params)
 									this.$emit("scrollToBottom")
 								})
 							}
@@ -96,7 +96,7 @@
 									sendStatus: "success",
 									k: "k0"
 								}
-								this.$store.dispatch("chatDetail/sendImg", params)
+								this.$store.dispatch("chatDetail/addMessage", params)
 								this.$emit("scrollToBottom")
 							},
 							fail: (error) => {
@@ -136,7 +136,7 @@
 									sendStatus: "success",
 									k: "k0"
 								}
-								this.$store.dispatch("chatDetail/sendMap", params)
+								this.$store.dispatch("chatDetail/addMessage", params)
 								this.$emit("scrollToBottom")
 							}
 						})

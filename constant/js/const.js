@@ -14,6 +14,8 @@ const Constant = {
 	left_sound: "\ue67f",													// 左三角
 	right_sound: "\ue67d",													// 右三角
 	audio_down: "\ue652",													// 键盘收起
+	off_icon: "\ue60f",														// 关闭
+	play_audio: "\ue800",													// 语音播放
 }
 
 export default Constant;

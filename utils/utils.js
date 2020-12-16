@@ -41,7 +41,6 @@ export function parseTime(val) {
 	const startNowYear = new Date(new Date().getFullYear(), 0, 1, 0, 0, 0).valueOf()
 	
 	const { Y, M, D, h, m, s } = timestampToTime(val)
-	console.log("11")
 	if(val < startNowYear) {
 		return `${Y}年${M}月${D}日 ${h}:${m}:${s}`
 	}

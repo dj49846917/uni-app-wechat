@@ -6,7 +6,7 @@
 			const domModule = weex.requireModule('dom');
 			domModule.addRule('fontFace', {
 				fontFamily: 'iconfont',
-				src: "url('https://at.alicdn.com/t/font_2199095_pe46qgvtjv.ttf')"
+				src: "url('https://at.alicdn.com/t/font_2199095_9gxk9vs3sfv.ttf')"
 			});
 			this.$store.commit("app/setTipBarHeight", plus.navigator.getStatusbarHeight())
 			// #endif
